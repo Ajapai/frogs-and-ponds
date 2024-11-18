@@ -9,6 +9,20 @@ class ATargetPoint;
 class UBillboardComponent;
 class USplineComponent;
 
+
+USTRUCT(BlueprintType)
+struct FDebugSpriteSettings
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UTexture2D> Texture = nullptr;
+	UPROPERTY(EditAnywhere)
+	FVector Offset = FVector(0,0,30.0f);
+	UPROPERTY(EditAnywhere)
+	FVector Scale = FVector::OneVector;
+};
+
 UCLASS()
 class FROGSANDPONDS_API AEnemyPath : public AActor
 {
@@ -28,13 +42,23 @@ protected:
 	
 // UProperties
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Custom|Components")
 	TObjectPtr<USplineComponent> SplineComponent;
 
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UBillboardComponent> StartBillboardComponent;
+	UPROPERTY(EditAnywhere, Category="Custom|DebugSprites")
+	FDebugSpriteSettings StartPointSpriteSettings;
 
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UBillboardComponent> EndBillboardComponent;
+	UPROPERTY(EditAnywhere, Category="Custom|DebugSprites")
+	FDebugSpriteSettings EndPointSpriteSettings;
+
+
+// Member Functions
+private:
+	void UpdateBillboardComponents();
+
 	
+// Member Pointers
+private:
+	TObjectPtr<UBillboardComponent> StartBillboardComponent;
+	TObjectPtr<UBillboardComponent> EndBillboardComponent;
 };
