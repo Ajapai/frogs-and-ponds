@@ -6,7 +6,7 @@
 #include <string>
 
 #include "AbilitySystemComponent.h"
-#include "Gameplay/AbilitySystem/Abilities/MainGameplayAbility.h"
+#include "Gameplay/AbilitySystem/Abilities/BaseGameplayAbility.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -30,7 +30,7 @@ UAbilitySystemComponent* AEnemyBase::GetAbilitySystemComponent() const
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	if (!AbilitySystemComponent) return;
 	
 	for (auto Ability : DefaultAbilities)
@@ -39,6 +39,8 @@ void AEnemyBase::BeginPlay()
 		AbilitySystemComponent->GiveAbility(
 			FGameplayAbilitySpec(Ability, 1, static_cast<int32>(EAbilityInputID::None), this));
 	}
+	
+	AfterBeginPlay();
 }
 
 // Called every frame

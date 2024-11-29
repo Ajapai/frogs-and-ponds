@@ -7,7 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "EnemyBase.generated.h"
 
-class UMainGameplayAbility;
+class UBaseGameplayAbility;
 
 UCLASS()
 class FROGSANDPONDS_API AEnemyBase : public AActor, public IAbilitySystemInterface 
@@ -28,11 +28,14 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void AfterBeginPlay();
+
 	
 	// UProperties
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom")
-	TArray<TSubclassOf<UMainGameplayAbility>> DefaultAbilities;
+	TArray<TSubclassOf<UBaseGameplayAbility>> DefaultAbilities;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Custom")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
