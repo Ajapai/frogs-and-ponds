@@ -7,7 +7,10 @@
 #include "AbilitySystemInterface.h"
 #include "EnemyBase.generated.h"
 
-class UMainGameplayAbility;
+class UBaseAttributeSet;
+class AEnemyPath;
+class USplineComponent;
+class UBaseGameplayAbility;
 
 UCLASS()
 class FROGSANDPONDS_API AEnemyBase : public AActor, public IAbilitySystemInterface 
@@ -32,12 +35,22 @@ protected:
 	// UProperties
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom")
-	TArray<TSubclassOf<UMainGameplayAbility>> DefaultAbilities;
+	TArray<TSubclassOf<UBaseGameplayAbility>> DefaultAbilities;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom")
+	TArray<TSubclassOf<UBaseAttributeSet>> DefaultAttributes;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Custom")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-	
+
 private:
-	UPROPERTY(EditAnywhere, Category="Custom")
+	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
+	
+	UPROPERTY(EditInstanceOnly, Category="Custom")
+	TObjectPtr<const AEnemyPath> EnemyPath;
+
+
+	// Member Pointers
+	TWeakObjectPtr<USplineComponent> SplineComponent;
 };

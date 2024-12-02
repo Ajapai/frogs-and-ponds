@@ -3,10 +3,12 @@
 
 #include "Enemies/EnemyBase.h"
 
-#include <string>
-
 #include "AbilitySystemComponent.h"
-#include "Gameplay/AbilitySystem/Abilities/MainGameplayAbility.h"
+#include "Components/SplineComponent.h"
+#include "Gameplay/EnemyPath.h"
+#include "Gameplay/AbilitySystem/Abilities/BaseGameplayAbility.h"
+#include "Gameplay/AbilitySystem/Attributes/EnemyAttributeSet.h"
+
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -19,7 +21,9 @@ AEnemyBase::AEnemyBase()
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
 
+
 }
+
 
 UAbilitySystemComponent* AEnemyBase::GetAbilitySystemComponent() const
 {
@@ -30,8 +34,15 @@ UAbilitySystemComponent* AEnemyBase::GetAbilitySystemComponent() const
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	SplineComponent = Cast<USplineComponent>(EnemyPath->GetComponentByClass(USplineComponent::StaticClass()));
+	SetActorLocation(SplineComponent->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World));
+	
 	if (!AbilitySystemComponent) return;
+
+	AbilitySystemComponent->AddSet<UEnemyAttributeSet>();
+
+	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetMaxDistanceAttribute(), SplineComponent->GetSplineLength());
 	
 	for (auto Ability : DefaultAbilities)
 	{
@@ -46,5 +57,6 @@ void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 }
 
