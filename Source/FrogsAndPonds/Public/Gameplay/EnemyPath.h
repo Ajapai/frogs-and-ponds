@@ -29,14 +29,16 @@ class FROGSANDPONDS_API AEnemyPath : public AActor
 	GENERATED_BODY()
 
 	
-// Constructors
+// Lifecycle
 public:	
 	AEnemyPath();
 
-	
-// Overrides
 protected:
 	virtual void BeginPlay() override;
+
+	
+// Inheritance
+protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	

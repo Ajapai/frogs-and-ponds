@@ -24,13 +24,11 @@ AEnemyBase::AEnemyBase()
 
 }
 
-
 UAbilitySystemComponent* AEnemyBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
 
-// Called when the game starts or when spawned
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -40,10 +38,33 @@ void AEnemyBase::BeginPlay()
 	
 	if (!AbilitySystemComponent) return;
 
-	AbilitySystemComponent->AddSet<UEnemyAttributeSet>();
+	InitializeAbilities();
+	InitializeAttributes();
 
-	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetMaxDistanceAttribute(), SplineComponent->GetSplineLength());
-	
+}
+
+void AEnemyBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	FString message = FString::Printf(
+		TEXT("Distance: %f, MaxDistance: %f"),
+		AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetDistanceAttribute()),
+		AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMaxDistanceAttribute()));
+
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, message, true, {1, 1});
+
+	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetDistanceAttribute(),
+	                                                AbilitySystemComponent->GetNumericAttribute(
+		                                                UEnemyAttributeSet::GetDistanceAttribute()) + DeltaTime * 300);
+
+	SetActorLocation(SplineComponent->GetLocationAtDistanceAlongSpline(
+		AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetDistanceAttribute()),
+		ESplineCoordinateSpace::World));
+}
+
+void AEnemyBase::InitializeAbilities()
+{
 	for (auto Ability : DefaultAbilities)
 	{
 		if (!Ability) continue;
@@ -52,11 +73,12 @@ void AEnemyBase::BeginPlay()
 	}
 }
 
-// Called every frame
-void AEnemyBase::Tick(float DeltaTime)
+void AEnemyBase::InitializeAttributes()
 {
-	Super::Tick(DeltaTime);
+	for (auto AttributeSetType : DefaultAttributes)
+	{
+		AbilitySystemComponent->AddAttributeSetSubobject(NewObject<UBaseAttributeSet>(this, AttributeSetType));
+	}
 
-	
+	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetMaxDistanceAttribute(), SplineComponent->GetSplineLength());
 }
-

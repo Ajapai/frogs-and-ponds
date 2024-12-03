@@ -17,12 +17,12 @@ class FROGSANDPONDS_API UEnemyAttributeSet : public UBaseAttributeSet
 	GENERATED_BODY()
 
 
-	// Constructor
+	// Lifecycle
 public:
 	UEnemyAttributeSet();
 
 	
-	// Overrides
+	// Inheritance
 private:
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void ClampAttributeOnChange(const FGameplayAttribute& Attribute, float& NewValue) const override;

@@ -25,7 +25,7 @@ class FROGSANDPONDS_API UBaseGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 
-	// Constructor
+	// Lifecycle
 public:
 	UBaseGameplayAbility();
 

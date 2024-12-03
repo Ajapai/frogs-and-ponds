@@ -34,6 +34,6 @@ void UEnemyAttributeSet::ClampAttributeOnChange(const FGameplayAttribute& Attrib
 	}
 	else if (Attribute == GetDistanceAttribute())
 	{
-		NewValue = FMath::Clamp(GetDistance(), 0,  GetMaxDistance());
+		// NewValue = FMath::Clamp(GetDistance(), 0,  GetMaxDistance());
 	}
 }

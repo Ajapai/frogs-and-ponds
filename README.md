@@ -12,13 +12,13 @@
 
 ### Structure Main Categories:
 ```
-// Constructors
+// Lifecycle
 ...
 
-// Overrides
+// Inheritance
 ...
 
-// UFuntions
+// UFunctions
 ...
 
 // UProperties

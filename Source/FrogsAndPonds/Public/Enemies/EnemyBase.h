@@ -18,18 +18,18 @@ class FROGSANDPONDS_API AEnemyBase : public AActor, public IAbilitySystemInterfa
 	GENERATED_BODY()
 
 	
-	// Constructor
+	// Lifecycle
 public:	
 	AEnemyBase();
 
+protected:
+	virtual void BeginPlay() override;
 
-	// Overrides
+	
+	// Inheritance
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual void Tick(float DeltaTime) override;
-
-protected:
-	virtual void BeginPlay() override;
 
 	
 	// UProperties
@@ -50,6 +50,12 @@ private:
 	UPROPERTY(EditInstanceOnly, Category="Custom")
 	TObjectPtr<const AEnemyPath> EnemyPath;
 
+
+	// Member Functions
+	void InitializeAbilities();
+
+	void InitializeAttributes();
+	
 
 	// Member Pointers
 	TWeakObjectPtr<USplineComponent> SplineComponent;
