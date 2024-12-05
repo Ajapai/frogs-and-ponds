@@ -8,5 +8,6 @@
 UGameplayAbility_Move::UGameplayAbility_Move()
 {
 	SetAssetTags(FGameplayTagContainer(GTag_Ability_Move));
+	ActivationOwnedTags = FGameplayTagContainer(GTag_Ability_Move);
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }

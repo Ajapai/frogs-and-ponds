@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "Components/SplineComponent.h"
+#include "Core/GameplayTagsDeclaration.h"
 #include "Gameplay/EnemyPath.h"
 #include "Gameplay/AbilitySystem/Abilities/BaseGameplayAbility.h"
 #include "Gameplay/AbilitySystem/Attributes/EnemyAttributeSet.h"
@@ -20,13 +21,6 @@ AEnemyBase::AEnemyBase()
 	RootComponent = StaticMeshComponent;
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
-
-
-}
-
-UAbilitySystemComponent* AEnemyBase::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComponent;
 }
 
 void AEnemyBase::BeginPlay()
@@ -41,19 +35,29 @@ void AEnemyBase::BeginPlay()
 	InitializeAbilities();
 	InitializeAttributes();
 
+
+	AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(GTag_Ability_Move));
+}
+
+UAbilitySystemComponent* AEnemyBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 
 void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FString message = FString::Printf(
-		TEXT("Distance: %f, MaxDistance: %f"),
-		AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetDistanceAttribute()),
-		AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMaxDistanceAttribute()));
+	// FString message = FString::Printf(
+	// 	TEXT("Distance: %f, MaxDistance: %f"),
+	// 	AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetDistanceAttribute()),
+	// 	AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMaxDistanceAttribute()));
+	//
+	// GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, message, true, {1, 1});
 
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, message, true, {1, 1});
-
+	if (AbilitySystemComponent->HasMatchingGameplayTag(GTag_Ability_Move))
+	{
+		
 	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetDistanceAttribute(),
 	                                                AbilitySystemComponent->GetNumericAttribute(
 		                                                UEnemyAttributeSet::GetDistanceAttribute()) + DeltaTime * 300);
@@ -61,6 +65,7 @@ void AEnemyBase::Tick(float DeltaTime)
 	SetActorLocation(SplineComponent->GetLocationAtDistanceAlongSpline(
 		AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetDistanceAttribute()),
 		ESplineCoordinateSpace::World));
+	}
 }
 
 void AEnemyBase::InitializeAbilities()
