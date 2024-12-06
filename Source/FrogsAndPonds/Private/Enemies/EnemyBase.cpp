@@ -4,10 +4,12 @@
 #include "Enemies/EnemyBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SplineComponent.h"
 #include "Core/GameplayTagsDeclaration.h"
 #include "Gameplay/EnemyPath.h"
 #include "Gameplay/AbilitySystem/Abilities/BaseGameplayAbility.h"
+#include "Gameplay/AbilitySystem/Abilities/GameplayAbility_Move.h"
 #include "Gameplay/AbilitySystem/Attributes/EnemyAttributeSet.h"
 
 
@@ -17,10 +19,18 @@ AEnemyBase::AEnemyBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(FName("SphereComponent"));
+	CapsuleComponent->SetCollisionProfileName(FName("OverlapAllDynamic"));
+	RootComponent = CapsuleComponent;
+	
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMeshComponent"));
-	RootComponent = StaticMeshComponent;
+	StaticMeshComponent->SetCollisionProfileName(FName("IgnoreAll"));
+	StaticMeshComponent->SetupAttachment(RootComponent);
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
+
+	DefaultAbilities.Add(UGameplayAbility_Move::StaticClass());
+	DefaultAttributes.Add(UEnemyAttributeSet::StaticClass());
 }
 
 void AEnemyBase::BeginPlay()
@@ -35,7 +45,6 @@ void AEnemyBase::BeginPlay()
 	InitializeAbilities();
 	InitializeAttributes();
 
-
 	AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(GTag_Ability_Move));
 }
 
@@ -48,23 +57,15 @@ void AEnemyBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// FString message = FString::Printf(
-	// 	TEXT("Distance: %f, MaxDistance: %f"),
-	// 	AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetDistanceAttribute()),
-	// 	AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMaxDistanceAttribute()));
-	//
-	// GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, message, true, {1, 1});
-
 	if (AbilitySystemComponent->HasMatchingGameplayTag(GTag_Ability_Move))
 	{
-		
-	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetDistanceAttribute(),
-	                                                AbilitySystemComponent->GetNumericAttribute(
-		                                                UEnemyAttributeSet::GetDistanceAttribute()) + DeltaTime * 300);
+		AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetDistanceAttribute(),
+														AbilitySystemComponent->GetNumericAttribute(
+															UEnemyAttributeSet::GetDistanceAttribute()) + DeltaTime * 300);
 
-	SetActorLocation(SplineComponent->GetLocationAtDistanceAlongSpline(
-		AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetDistanceAttribute()),
-		ESplineCoordinateSpace::World));
+		SetActorLocation(SplineComponent->GetLocationAtDistanceAlongSpline(
+			AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetDistanceAttribute()),
+			ESplineCoordinateSpace::World));
 	}
 }
 

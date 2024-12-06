@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilitySpec.h"
 #include "Components/SphereComponent.h"
+#include "Enemies/EnemyBase.h"
 #include "Gameplay/AbilitySystem/Abilities/BaseGameplayAbility.h"
 #include "Gameplay/AbilitySystem/Attributes/BaseAttributeSet.h"
 
@@ -22,6 +23,9 @@ ATowerBase::ATowerBase()
 	StaticMeshComponent->SetupAttachment(RootComponent);
 	
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
+
+	AttackSphere->OnComponentBeginOverlap.AddDynamic(this, &ATowerBase::OnComponentBeginOverlap);
+	AttackSphere->OnComponentEndOverlap.AddDynamic(this, &ATowerBase::OnComponentEndOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -41,6 +45,29 @@ void ATowerBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ATowerBase::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, "Enter", true, {1, 1});
+	if (OtherActor->IsA(AEnemyBase::StaticClass()))
+	{
+		EnemiesInRange.Add(Cast<AEnemyBase>(OtherActor));
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, "In Range", true, {1, 1});
+	}
+
+}
+
+void ATowerBase::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, "Leave", true, {1, 1});
+	if (OtherActor->IsA(AEnemyBase::StaticClass()))
+	{
+		EnemiesInRange.Remove(Cast<AEnemyBase>(OtherActor));
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, "Out Of Range", true, {1, 1});
+	}
 }
 
 void ATowerBase::InitializeAbilities()

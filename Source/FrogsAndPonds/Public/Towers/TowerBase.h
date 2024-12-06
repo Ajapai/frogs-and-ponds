@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "TowerBase.generated.h"
 
+class AEnemyBase;
 class USphereComponent;
 class UBaseAttributeSet;
 class UBaseGameplayAbility;
@@ -18,7 +19,7 @@ class FROGSANDPONDS_API ATowerBase : public AActor, public IAbilitySystemInterfa
 
 
 	// Lifecycle
-public:	
+public:
 	ATowerBase();
 
 protected:
@@ -30,6 +31,14 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual void Tick(float DeltaTime) override;
 
+
+	// UFunctions
+private:
+	UFUNCTION()
+	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+	                             const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 	// UProperties
 protected:
@@ -53,5 +62,8 @@ private:
 	// Member Functions
 	void InitializeAbilities();
 	void InitializeAttributes();
-	
+
+
+	// Member Variables
+	TArray<TObjectPtr<AEnemyBase>> EnemiesInRange;
 };

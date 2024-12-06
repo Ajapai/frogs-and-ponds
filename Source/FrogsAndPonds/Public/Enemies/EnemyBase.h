@@ -7,6 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "EnemyBase.generated.h"
 
+class UCapsuleComponent;
 class UBaseAttributeSet;
 class AEnemyPath;
 class USplineComponent;
@@ -46,6 +47,9 @@ protected:
 private:
 	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category="Custom")
+	TObjectPtr<UCapsuleComponent> CapsuleComponent;
 	
 	UPROPERTY(EditInstanceOnly, Category="Custom")
 	TObjectPtr<const AEnemyPath> EnemyPath;
