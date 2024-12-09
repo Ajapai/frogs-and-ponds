@@ -3,6 +3,10 @@
 
 #include "Core/GameplayTagsDeclaration.h"
 
-UE_DEFINE_GAMEPLAY_TAG(Ability, "Ability");
-UE_DEFINE_GAMEPLAY_TAG(Ability_Test, "Ability.Test");
-UE_DEFINE_GAMEPLAY_TAG(Ability_Move, "Ability.Move");
+// Abilities
+UE_DEFINE_GAMEPLAY_TAG(GTag_Ability, "Ability");
+UE_DEFINE_GAMEPLAY_TAG(GTag_Ability_Test, "Ability.Test");
+UE_DEFINE_GAMEPLAY_TAG(GTag_Ability_Move, "Ability.Move");
+
+// Tags
+UE_DEFINE_GAMEPLAY_TAG(GTag_Effect_Stun, "Effect.Stun");

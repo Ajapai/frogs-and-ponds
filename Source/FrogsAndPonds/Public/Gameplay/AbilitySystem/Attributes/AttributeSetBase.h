@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
-#include "BaseAttributeSet.generated.h"
+#include "AttributeSetBase.generated.h"
 
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
@@ -15,8 +15,8 @@ GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 /**
  * 
  */
-UCLASS()
-class FROGSANDPONDS_API UBaseAttributeSet : public UAttributeSet
+UCLASS(Abstract)
+class FROGSANDPONDS_API UAttributeSetBase : public UAttributeSet
 {
 	GENERATED_BODY()
 
