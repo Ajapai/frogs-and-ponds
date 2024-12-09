@@ -4,21 +4,25 @@
 ## C++ File Guidelines
 
 ### Good Practices:
+
 - Do not use Member References.
-- Use Subcategories where you see fit.
 - Alphabetical Sorting within the Structure.
-- Use two Spaces before new Structure Comment.
+- Use two Lines before new Structure Comment.
 - Always use Access Specifier after Structure Comment. (Even if redundant)
+
+#### Name Conventions
+- Use Specific first: EnemyBase & ArcherEnemy
+- GameplayAbilities: GameplayAbility_Move
 
 ### Structure Main Categories:
 ```
-// Constructors
+// Lifecycle
 ...
 
 // Overrides
 ...
 
-// UFuntions
+// UFunctions
 ...
 
 // UProperties

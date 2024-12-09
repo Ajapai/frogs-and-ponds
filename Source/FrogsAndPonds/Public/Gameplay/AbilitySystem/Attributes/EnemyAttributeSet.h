@@ -5,19 +5,19 @@
 #include "CoreMinimal.h"
 #include "AttributeSet.h"
 #include "AbilitySystemComponent.h"
-#include "Gameplay/AbilitySystem/Attributes/BaseAttributeSet.h"
+#include "AttributeSetBase.h"
 #include "EnemyAttributeSet.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class FROGSANDPONDS_API UEnemyAttributeSet : public UBaseAttributeSet
+class FROGSANDPONDS_API UEnemyAttributeSet : public UAttributeSetBase
 {
 	GENERATED_BODY()
 
 
-	// Constructor
+	// Lifecycle
 public:
 	UEnemyAttributeSet();
 

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
-#include "MainGameplayAbility.generated.h"
+#include "GameplayAbility_Base.generated.h"
 
 
 UENUM(BlueprintType)
@@ -19,15 +19,15 @@ enum class EAbilityInputID : uint8
 /**
  * 
  */
-UCLASS()
-class FROGSANDPONDS_API UMainGameplayAbility : public UGameplayAbility
+UCLASS(Abstract)
+class FROGSANDPONDS_API UGameplayAbility_Base : public UGameplayAbility
 {
 	GENERATED_BODY()
 
 
-	// Constructor
+	// Lifecycle
 public:
-	UMainGameplayAbility();
+	UGameplayAbility_Base();
 
 	
 	// UProperties
