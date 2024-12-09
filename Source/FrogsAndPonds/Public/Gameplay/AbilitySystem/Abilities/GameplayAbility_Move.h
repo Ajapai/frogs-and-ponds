@@ -15,7 +15,7 @@ class FROGSANDPONDS_API UGameplayAbility_Move : public UGameplayAbility_Base
 	GENERATED_BODY()
 
 
-	// Lifecycle
+// Lifecycle
 public:
 	UGameplayAbility_Move();
 

@@ -17,18 +17,18 @@ class FROGSANDPONDS_API UEnemyAttributeSet : public UAttributeSetBase
 	GENERATED_BODY()
 
 
-	// Lifecycle
+// Lifecycle
 public:
 	UEnemyAttributeSet();
 
 	
-	// Overrides
+// Overrides
 private:
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void ClampAttributeOnChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
 
 	
-	// UProperties
+// UProperties
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
 	FGameplayAttributeData Health;
@@ -43,15 +43,11 @@ public:
 	ATTRIBUTE_ACCESSORS(UEnemyAttributeSet, MoveSpeed);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
-	FGameplayAttributeData MaxMoveSpeed;
-	ATTRIBUTE_ACCESSORS(UEnemyAttributeSet, MaxMoveSpeed);
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
-	FGameplayAttributeData Distance;
-	ATTRIBUTE_ACCESSORS(UEnemyAttributeSet, Distance);
+	FGameplayAttributeData MoveDistance;
+	ATTRIBUTE_ACCESSORS(UEnemyAttributeSet, MoveDistance);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
-	FGameplayAttributeData MaxDistance;
-	ATTRIBUTE_ACCESSORS(UEnemyAttributeSet, MaxDistance);
+	FGameplayAttributeData MaxMoveDistance;
+	ATTRIBUTE_ACCESSORS(UEnemyAttributeSet, MaxMoveDistance);
 
 };

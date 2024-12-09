@@ -19,7 +19,7 @@ class FROGSANDPONDS_API AEnemyBase : public AActor, public IAbilitySystemInterfa
 	GENERATED_BODY()
 
 	
-	// Lifecycle
+// Lifecycle
 public:	
 	AEnemyBase();
 
@@ -27,13 +27,13 @@ protected:
 	virtual void BeginPlay() override;
 
 	
-	// Inheritance
+// Inheritance
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual void Tick(float DeltaTime) override;
 
 	
-	// UProperties
+// UProperties
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom")
 	TArray<TSubclassOf<UGameplayAbility_Base>> DefaultAbilities;
@@ -55,12 +55,23 @@ private:
 	TObjectPtr<const AEnemyPath> EnemyPath;
 
 
-	// Member Functions
+// Member Functions
+private:
 	void InitializeAbilities();
-
 	void InitializeAttributes();
 	
 
-	// Member Pointers
+// Member Accessors
+public:
+	float GetHealth() const;
+	float GetMoveDistance() const;
+	float GetMoveSpeed() const;
+
+private:
+	void SetMoveDistance(const float& NewValue) const;
+
+	
+// Member Pointers
+private:
 	TWeakObjectPtr<USplineComponent> SplineComponent;
 };

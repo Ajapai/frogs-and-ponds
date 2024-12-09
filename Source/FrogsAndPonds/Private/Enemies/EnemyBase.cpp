@@ -59,13 +59,8 @@ void AEnemyBase::Tick(float DeltaTime)
 
 	if (AbilitySystemComponent->HasMatchingGameplayTag(GTag_Ability_Move))
 	{
-		AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetDistanceAttribute(),
-														AbilitySystemComponent->GetNumericAttribute(
-															UEnemyAttributeSet::GetDistanceAttribute()) + DeltaTime * 300);
-
-		SetActorLocation(SplineComponent->GetLocationAtDistanceAlongSpline(
-			AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetDistanceAttribute()),
-			ESplineCoordinateSpace::World));
+		SetMoveDistance(GetMoveDistance() + DeltaTime * 300);
+		SetActorLocation(SplineComponent->GetLocationAtDistanceAlongSpline(GetMoveDistance(), ESplineCoordinateSpace::World));
 	}
 }
 
@@ -86,5 +81,25 @@ void AEnemyBase::InitializeAttributes()
 		AbilitySystemComponent->AddAttributeSetSubobject(NewObject<UAttributeSetBase>(this, AttributeSetType));
 	}
 
-	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetMaxDistanceAttribute(), SplineComponent->GetSplineLength());
+	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetMaxMoveDistanceAttribute(), SplineComponent->GetSplineLength());
+}
+
+float AEnemyBase::GetHealth() const
+{
+	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetHealthAttribute());
+}
+
+float AEnemyBase::GetMoveDistance() const
+{
+	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMoveDistanceAttribute());
+}
+
+float AEnemyBase::GetMoveSpeed() const
+{
+	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMoveSpeedAttribute());
+}
+
+void AEnemyBase::SetMoveDistance(const float& NewValue) const
+{
+	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetMoveDistanceAttribute(), NewValue);	
 }
