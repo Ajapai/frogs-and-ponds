@@ -25,18 +25,18 @@ class FROGSANDPONDS_API UGameplayAbility_Base : public UGameplayAbility
 	GENERATED_BODY()
 
 
-	// Lifecycle
+// Lifecycle
 public:
 	UGameplayAbility_Base();
 
 	
-	// UProperties
+// UProperties
 private:
 	UPROPERTY(EditAnywhere, Category="Custom")
 	EAbilityInputID AbilityInputID;
 
 
-	// Member Functions
+// Member Functions
 public:
 	EAbilityInputID GetAbilityInputId() const;
 };

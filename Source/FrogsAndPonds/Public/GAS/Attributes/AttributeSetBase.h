@@ -21,13 +21,13 @@ class FROGSANDPONDS_API UAttributeSetBase : public UAttributeSet
 	GENERATED_BODY()
 
 
-	// Overrides
+// Overrides
 protected:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PreAttributeBaseChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
 
 
-	// Member Functions
+// Member Functions
 protected:
 	virtual void ClampAttributeOnChange(const FGameplayAttribute& Attribute, float& NewValue) const;
 

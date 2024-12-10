@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Gameplay/AbilitySystem/Attributes/EnemyAttributeSet.h"
+#include "GAS/Attributes/EnemyAttributeSet.h"
 
 #include "GameplayEffectExtension.h"
 
@@ -9,9 +9,8 @@ UEnemyAttributeSet::UEnemyAttributeSet():
 Health(40.f),
 MaxHealth(40.f),
 MoveSpeed(3.f),
-MaxMoveSpeed(6.f),
-Distance(0.f),
-MaxDistance(100.f)
+MoveDistance(0.f),
+MaxMoveDistance(100.f)
 {
 }
 
@@ -28,12 +27,8 @@ void UEnemyAttributeSet::ClampAttributeOnChange(const FGameplayAttribute& Attrib
 	{
 		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
 	}
-	else if (Attribute == GetMoveSpeedAttribute())
+	else if (Attribute == GetMoveDistanceAttribute())
 	{
-		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMoveSpeed());
-	}
-	else if (Attribute == GetDistanceAttribute())
-	{
-		NewValue = FMath::Clamp(NewValue, 0.f,  GetMaxDistance());
+		NewValue = FMath::Clamp(NewValue, 0.f,  GetMaxMoveDistance());
 	}
 }

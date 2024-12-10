@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Gameplay/AbilitySystem/Attributes/AttributeSetBase.h"
+#include "GAS/Attributes/AttributeSetBase.h"
 
 void UAttributeSetBase::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {

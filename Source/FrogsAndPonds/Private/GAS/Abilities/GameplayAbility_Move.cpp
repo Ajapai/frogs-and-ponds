@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Gameplay/AbilitySystem/Abilities/GameplayAbility_Move.h"
+#include "GAS/Abilities/GameplayAbility_Move.h"
 
 #include "Core/GameplayTagsDeclaration.h"
 

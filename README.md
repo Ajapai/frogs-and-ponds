@@ -31,6 +31,9 @@
 // Member Functions
 ...
 
+// Member Accessors
+...
+
 // Member Pointers
 ...
 
