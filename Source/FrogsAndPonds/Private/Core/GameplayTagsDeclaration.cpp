@@ -7,6 +7,10 @@
 UE_DEFINE_GAMEPLAY_TAG(GTag_Ability, "Ability");
 UE_DEFINE_GAMEPLAY_TAG(GTag_Ability_Test, "Ability.Test");
 UE_DEFINE_GAMEPLAY_TAG(GTag_Ability_Move, "Ability.Move");
+UE_DEFINE_GAMEPLAY_TAG(GTag_Ability_Attack, "Ability.Attack");
 
-// Tags
-UE_DEFINE_GAMEPLAY_TAG(GTag_Effect_Stun, "Effect.Stun");
+// Status
+UE_DEFINE_GAMEPLAY_TAG(GTag_Status_Stun, "Status.Stun");
+
+// State
+UE_DEFINE_GAMEPLAY_TAG(GTag_State_LockedOn, "State.LockedOn");
