@@ -19,50 +19,27 @@
 // Lifecycle
 ...
 
-// Overrides
+// Operators
+...
+
+// Virtuals
 ...
 
 // UFunctions
 ...
 
+// Functions
+...
+
+// Accessors
+...
+
 // UProperties
 ...
 
-// Member Functions
+// Pointers
 ...
 
-// Member Pointers
+// Variables
 ...
-
-// Member Variables
-...
-
-// Editor Only Code
-...
-
-// Friend Classes
-...
-```
-
-### Structure Within
-```
-// Main Category
-public:
-    ...
-    
-protected:
-    ...
-    
-private:
-    ...
-    
-    // Sub Category
-public:
-    ...
-    
-protected:
-    ...
-    
-private:
-    ...
 ```
