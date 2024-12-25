@@ -9,7 +9,6 @@ class ATargetPoint;
 class UBillboardComponent;
 class USplineComponent;
 
-
 USTRUCT(BlueprintType)
 struct FDebugSpriteSettings
 {
@@ -37,9 +36,14 @@ protected:
 	virtual void BeginPlay() override;
 
 	
-// Overrides
+// Virtuals
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
+
+	
+// Functions
+private:
+	void UpdateBillboardComponents();
 
 	
 // UProperties
@@ -52,14 +56,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Custom|DebugSprites")
 	FDebugSpriteSettings EndPointSpriteSettings;
-
-
-// Member Functions
-private:
-	void UpdateBillboardComponents();
-
 	
-// Member Pointers
+	
+// Pointers
 private:
 	TObjectPtr<UBillboardComponent> StartBillboardComponent;
 	TObjectPtr<UBillboardComponent> EndBillboardComponent;
