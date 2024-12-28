@@ -3,25 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "ProjectileBase.generated.h"
+#include "Gameplay/Projectiles/ProjectileBase.h"
+#include "TargetProjectile.generated.h"
 
+/**
+ * 
+ */
 UCLASS()
-class FROGSANDPONDS_API AProjectileBase : public AActor
+class FROGSANDPONDS_API ATargetProjectile : public AProjectileBase
 {
 	GENERATED_BODY()
-
-
-// Lifecycle
-public:	
-	AProjectileBase();
-
-protected:
-	virtual void BeginPlay() override;
 
 
 // Overrides
 public:
 	virtual void Tick(float DeltaTime) override;
-
+	
 };

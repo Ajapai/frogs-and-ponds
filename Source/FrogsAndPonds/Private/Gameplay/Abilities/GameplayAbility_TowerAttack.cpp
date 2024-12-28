@@ -1,11 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GAS/Abilities/GameplayAbility_TowerAttack.h"
+#include "Gameplay/Abilities/GameplayAbility_TowerAttack.h"
 
 #include "Core/GameplayTagsDeclaration.h"
-#include "GAS/Attributes/TowerAttributeSet.h"
-#include "Towers/TowerBase.h"
+#include "Gameplay/EnemyBase.h"
+#include "Gameplay/Attributes/TowerAttributeSet.h"
+#include "Gameplay/TowerBase.h"
+#include "Gameplay/Projectiles/ProjectileBase.h"
 
 UGameplayAbility_TowerAttack::UGameplayAbility_TowerAttack(): OwningTower(nullptr), TimerManager(nullptr)
 {
@@ -17,6 +19,8 @@ UGameplayAbility_TowerAttack::UGameplayAbility_TowerAttack(): OwningTower(nullpt
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 	
 	AttackTimerDelegate.BindUObject(this, &UGameplayAbility_TowerAttack::OnAttackReady);
+
+	
 }
 
 void UGameplayAbility_TowerAttack::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
@@ -68,7 +72,28 @@ void UGameplayAbility_TowerAttack::OnAttackReady()
 	if (!IsActive()) return;
 	
 	TimerManager->SetTimer(AttackTimer, AttackTimerDelegate, OwningTower->GetAttackSpeed(), false);
-	ExecuteAttack();
+	StartAttack();
+}
+
+void UGameplayAbility_TowerAttack::StartAttack()
+{
+	FVector Location = OwningTower->GetBulletSpawnPoint()->GetComponentLocation();
+	FRotator Rotation = FRotator::ZeroRotator;
+	
+#if WITH_EDITOR
+	if (ProjectileClass == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, FString::Printf(TEXT("%s Projectile Class is Empty"), *this->GetName()), true, {1, 1});
+		return;
+	}
+#endif
+
+	AProjectileBase* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileClass, Location, Rotation);
+
+	SpawnedProjectile->SetActorScale3D(FVector(.1, .1, .1));
+	SpawnedProjectile->GetTargetStruckDelegate()->BindDynamic(this, &UGameplayAbility_TowerAttack::OnTargetStruck);
+	SpawnedProjectile->InitTarget(OwningTower->GetLockedOnEnemy()->GetProjectileTarget());
+	
 }
 
 void UGameplayAbility_TowerAttack::OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const

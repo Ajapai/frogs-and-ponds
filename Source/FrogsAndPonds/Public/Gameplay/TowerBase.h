@@ -49,7 +49,8 @@ private:
 private:
 	void InitializeAbilities();
 	void InitializeAttributes();
-	void OnLockedOnEnemyChange(AEnemyBase* PreviousTarget, AEnemyBase* NewTarget);
+	void OnLockedOnEnemyChange(const AEnemyBase* PreviousTarget, const AEnemyBase* NewTarget) const;
+	void UpdateAttackRange() const;
 
 	
 // Accessors
@@ -65,6 +66,14 @@ public:
 	UFUNCTION(BlueprintPure)
 	UPARAM(DisplayName = "AttackSpeed")
 	float GetAttackSpeed() const;
+	
+	UFUNCTION(BlueprintPure)
+	UPARAM(DisplayName = "AttackRange")
+	float GetAttackRange() const;
+
+	UFUNCTION(BlueprintPure)
+	const USceneComponent* GetBulletSpawnPoint() const;
+	
 	
 	
 // UProperties
@@ -85,11 +94,14 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Custom|Component")
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category="Custom|Component")
+	UPROPERTY(EditDefaultsOnly, Category="Custom|Component")
 	TObjectPtr<USceneComponent> BulletSpawnPoint;
 
 	UPROPERTY(EditDefaultsOnly, Category="Custom|Component")
-	TObjectPtr<USphereComponent> AttackSphere;
+	TObjectPtr<USphereComponent> AttackRangeSphere;
+
+	UPROPERTY(EditDefaultsOnly, Category="Custom|Component")
+	TObjectPtr<UDecalComponent> AttackRangeDecal;
 
 	
 // Variables

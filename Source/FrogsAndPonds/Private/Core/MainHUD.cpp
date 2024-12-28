@@ -4,8 +4,8 @@
 #include "Core/MainHUD.h"
 
 #include "EngineUtils.h"
-#include "Enemies/EnemyBase.h"
-#include "Towers/TowerBase.h"
+#include "Gameplay/EnemyBase.h"
+#include "Gameplay/TowerBase.h"
 
 void AMainHUD::GetDebugActorList(TArray<AActor*>& InOutList)
 {

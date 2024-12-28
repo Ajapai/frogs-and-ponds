@@ -3,9 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GAS/Abilities/GameplayAbility_Base.h"
+#include "Gameplay/Abilities/GameplayAbility_Base.h"
 #include "GameplayAbility_TowerAttack.generated.h"
 
+class AProjectileBase;
 class ATowerBase;
 /**
  * 
@@ -35,19 +36,22 @@ protected:
 // UFunctions
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-	void ExecuteAttack();
-	
+	void OnTargetStruck(AActor* Actor);
 
 // Functions
 protected:
 	void OnAttackReady();
+	void StartAttack();
 	void OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const;
 
 
 // UProperties
 protected:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category="Custom|Component")
 	TWeakObjectPtr<ATowerBase> OwningTower;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom|Component")
+	TSubclassOf<AProjectileBase> ProjectileClass;
 	
 
 // Pointers
