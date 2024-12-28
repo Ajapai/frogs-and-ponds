@@ -1,11 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GAS/Attributes/TowerAttributeSet.h"
+#include "Gameplay/Attributes/TowerAttributeSet.h"
 
 UTowerAttributeSet::UTowerAttributeSet():
 AttackPower(1),
-AttackSpeed(1)
+AttackSpeed(1),
+AttackRange(400)
 {
 }
 

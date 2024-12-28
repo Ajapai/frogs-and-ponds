@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
-#include "GAS/Attributes/AttributeSetBase.h"
+#include "Gameplay/Attributes/AttributeSetBase.h"
 #include "TowerAttributeSet.generated.h"
 
 /**
@@ -36,4 +36,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
 	FGameplayAttributeData AttackSpeed;
 	ATTRIBUTE_ACCESSORS(UTowerAttributeSet, AttackSpeed);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
+	FGameplayAttributeData AttackRange;
+	ATTRIBUTE_ACCESSORS(UTowerAttributeSet, AttackRange);	
 };

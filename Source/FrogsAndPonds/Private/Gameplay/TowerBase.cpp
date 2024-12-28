@@ -5,13 +5,14 @@
 
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilitySpec.h"
+#include "Components/DecalComponent.h"
 #include "Components/SphereComponent.h"
 #include "Core/GameplayTagsDeclaration.h"
-#include "Enemies/EnemyBase.h"
-#include "GAS/Abilities/GameplayAbility_Base.h"
-#include "GAS/Abilities/GameplayAbility_TowerAttack.h"
-#include "GAS/Attributes/AttributeSetBase.h"
-#include "GAS/Attributes/TowerAttributeSet.h"
+#include "Gameplay/EnemyBase.h"
+#include "Gameplay/Abilities/GameplayAbility_Base.h"
+#include "Gameplay/Abilities/GameplayAbility_TowerAttack.h"
+#include "Gameplay/Attributes/AttributeSetBase.h"
+#include "Gameplay/Attributes/TowerAttributeSet.h"
 
 // Sets default values
 ATowerBase::ATowerBase()
@@ -19,19 +20,26 @@ ATowerBase::ATowerBase()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	AttackSphere = CreateDefaultSubobject<USphereComponent>(FName("AttackSphere"));
-	RootComponent = AttackSphere;
+	AttackRangeSphere = CreateDefaultSubobject<USphereComponent>(FName("AttackSphere"));
+	AttackRangeSphere->SetCollisionProfileName(FName("OverlapAll"));
+	AttackRangeSphere->OnComponentBeginOverlap.AddDynamic(this, &ATowerBase::OnComponentBeginOverlap);
+	AttackRangeSphere->OnComponentEndOverlap.AddDynamic(this, &ATowerBase::OnComponentEndOverlap);
+	RootComponent = AttackRangeSphere;
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMeshComponent"));
+	StaticMeshComponent->SetCollisionProfileName(FName("IgnoreAll"));
 	StaticMeshComponent->SetupAttachment(RootComponent);
 
 	BulletSpawnPoint = CreateDefaultSubobject<USceneComponent>(FName("BulletSpawnPoint"));
+	BulletSpawnPoint->SetRelativeLocation(FVector(0, 0, 120));
 	BulletSpawnPoint->SetupAttachment(RootComponent);
+
+	AttackRangeDecal = CreateDefaultSubobject<UDecalComponent>(FName("AttackRangeDecal"));
+	AttackRangeDecal->SetRelativeRotation(FRotator(90, 0, 0));
+	AttackRangeDecal->DecalSize = FVector(1, 400, 400);
+	AttackRangeDecal->SetupAttachment(RootComponent);
 	
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
-
-	AttackSphere->OnComponentBeginOverlap.AddDynamic(this, &ATowerBase::OnComponentBeginOverlap);
-	AttackSphere->OnComponentEndOverlap.AddDynamic(this, &ATowerBase::OnComponentEndOverlap);
 
 	DefaultAttributes.Add(UTowerAttributeSet::StaticClass());
 }
@@ -44,7 +52,9 @@ void ATowerBase::BeginPlay()
 	if (!AbilitySystemComponent) return;
 
 	InitializeAbilities();
-	InitializeAttributes();	
+	InitializeAttributes();
+
+	UpdateAttackRange();
 }
 
 UAbilitySystemComponent* ATowerBase::GetAbilitySystemComponent() const
@@ -111,7 +121,7 @@ void ATowerBase::InitializeAttributes()
 	}
 }
 
-void ATowerBase::OnLockedOnEnemyChange(AEnemyBase* PreviousTarget, AEnemyBase* NewTarget)
+void ATowerBase::OnLockedOnEnemyChange(const AEnemyBase* PreviousTarget, const AEnemyBase* NewTarget) const
 {
 	if (PreviousTarget && NewTarget) return;
 	if (NewTarget)
@@ -122,6 +132,13 @@ void ATowerBase::OnLockedOnEnemyChange(AEnemyBase* PreviousTarget, AEnemyBase* N
 	{
 		AbilitySystemComponent->RemoveLooseGameplayTag(GTag_State_LockedOn);
 	}
+}
+
+void ATowerBase::UpdateAttackRange() const
+{
+	AttackRangeSphere->SetSphereRadius(GetAttackRange());
+	AttackRangeDecal->DecalSize = FVector(1, GetAttackRange(), GetAttackRange());
+	AttackRangeDecal->MarkRenderStateDirty();
 }
 
 AEnemyBase* ATowerBase::GetLockedOnEnemy() const
@@ -137,4 +154,14 @@ float ATowerBase::GetAttackPower() const
 float ATowerBase::GetAttackSpeed() const
 {
 	return AbilitySystemComponent->GetNumericAttribute(UTowerAttributeSet::GetAttackSpeedAttribute());
+}
+
+float ATowerBase::GetAttackRange() const
+{
+	return AbilitySystemComponent->GetNumericAttribute(UTowerAttributeSet::GetAttackRangeAttribute());
+}
+
+const USceneComponent* ATowerBase::GetBulletSpawnPoint() const
+{
+	return BulletSpawnPoint;
 }

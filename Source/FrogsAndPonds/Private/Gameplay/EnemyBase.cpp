@@ -8,8 +8,8 @@
 #include "Components/SplineComponent.h"
 #include "Core/GameplayTagsDeclaration.h"
 #include "Gameplay/EnemyPath.h"
-#include "GAS/Abilities/GameplayAbility_Move.h"
-#include "GAS/Attributes/EnemyAttributeSet.h"
+#include "Gameplay/Abilities/GameplayAbility_Move.h"
+#include "Gameplay/Attributes/EnemyAttributeSet.h"
 
 
 // Sets default values
@@ -25,6 +25,9 @@ AEnemyBase::AEnemyBase()
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMeshComponent"));
 	StaticMeshComponent->SetCollisionProfileName(FName("IgnoreAll"));
 	StaticMeshComponent->SetupAttachment(RootComponent);
+
+	ProjectileTarget = CreateDefaultSubobject<USceneComponent>(FName("ProjectileTarget"));
+	ProjectileTarget->SetupAttachment(RootComponent);
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
 
@@ -60,7 +63,7 @@ void AEnemyBase::Tick(float DeltaTime)
 
 	if (AbilitySystemComponent->HasMatchingGameplayTag(GTag_Ability_Move))
 	{
-		SetMoveDistance(GetMoveDistance() + DeltaTime * 300);
+		SetMoveDistance(GetMoveDistance() + DeltaTime * 300 * GetMoveSpeed());
 		SetActorLocation(SplineComponent->GetLocationAtDistanceAlongSpline(GetMoveDistance(), ESplineCoordinateSpace::World));
 	}
 }
@@ -87,11 +90,18 @@ void AEnemyBase::InitializeAttributes()
 
 void AEnemyBase::HealthChanged(const FOnAttributeChangeData& OnAttributeChangeData)
 {
+	OnHealthChanged(OnAttributeChangeData.OldValue, OnAttributeChangeData.NewValue);
 	if (OnAttributeChangeData.NewValue <= 0) Destroy();
 }
+
 float AEnemyBase::GetHealth() const
 {
 	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetHealthAttribute());
+}
+
+float AEnemyBase::GetMaxHealth() const
+{
+	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMaxHealthAttribute());
 }
 
 float AEnemyBase::GetMoveDistance() const
@@ -102,6 +112,11 @@ float AEnemyBase::GetMoveDistance() const
 float AEnemyBase::GetMoveSpeed() const
 {
 	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMoveSpeedAttribute());
+}
+
+const USceneComponent* AEnemyBase::GetProjectileTarget()
+{
+	return ProjectileTarget;
 }
 
 void AEnemyBase::SetMoveDistance(const float& NewValue) const

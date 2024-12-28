@@ -34,6 +34,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	
+// UFunctions
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHealthChanged(float OldValue, float NewValue);
+
+	
 // Functions
 private:
 	void InitializeAbilities();
@@ -46,9 +52,13 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetHealth() const;
 	UFUNCTION(BlueprintPure)
+	float GetMaxHealth() const;
+	UFUNCTION(BlueprintPure)
 	float GetMoveDistance() const;
 	UFUNCTION(BlueprintPure)
 	float GetMoveSpeed() const;
+
+	const USceneComponent* GetProjectileTarget();
 
 private:
 	void SetMoveDistance(const float& NewValue) const;
@@ -65,6 +75,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Custom")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom")
+	TObjectPtr<USceneComponent> ProjectileTarget;
+	
 private:
 	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
