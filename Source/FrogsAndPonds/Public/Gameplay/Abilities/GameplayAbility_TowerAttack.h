@@ -7,8 +7,18 @@
 #include "Gameplay/Abilities/GameplayAbility_Base.h"
 #include "GameplayAbility_TowerAttack.generated.h"
 
+class AEnemyBase;
 class AProjectileBase;
 class ATowerBase;
+
+UENUM()
+enum class ETargetingMethod: uint8
+{
+	First,
+	Last,
+	Random
+};
+
 /**
  * 
  */
@@ -43,24 +53,29 @@ protected:
 // Functions
 protected:
 	void OnAttackReady();
-	void OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const;
 	void StartAttack();
+	AEnemyBase* GetCurrentTarget() const;
+	void OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const;
 
 
 // UProperties
 protected:
-	UPROPERTY(BlueprintReadOnly, Category="Custom|Component")
+	UPROPERTY(BlueprintReadOnly)
 	TWeakObjectPtr<ATowerBase> OwningTower;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom|Component")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom")
 	TSubclassOf<AProjectileBase> ProjectileClass;
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category="Custom|Damage")
+	UPROPERTY(EditDefaultsOnly, Category="Custom")
+	ETargetingMethod TargetingMethod = ETargetingMethod::First;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	float BaseDamage = 5;
 
-	UPROPERTY(EditDefaultsOnly, Category="Custom|Damage")
+	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	float AttackPowerCoefficient = 1;
+
 	
 
 // Variables

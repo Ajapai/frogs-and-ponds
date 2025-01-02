@@ -14,6 +14,7 @@ UE_DEFINE_GAMEPLAY_TAG(GTag_Status_Stun, "Status.Stun");
 
 // State
 UE_DEFINE_GAMEPLAY_TAG(GTag_State_LockedOn, "State.LockedOn");
+UE_DEFINE_GAMEPLAY_TAG(GTag_State_EnemyInRange, "State.EnemyInRange");
 UE_DEFINE_GAMEPLAY_TAG(GTag_State_Active, "State.Active");
 
 // SetByCaller Tags 

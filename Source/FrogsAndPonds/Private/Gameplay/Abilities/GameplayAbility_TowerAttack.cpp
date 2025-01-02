@@ -12,7 +12,7 @@
 UGameplayAbility_TowerAttack::UGameplayAbility_TowerAttack(): OwningTower(nullptr), TimerManager(nullptr)
 {
 	FAbilityTriggerData AbilityTriggerData;
-	AbilityTriggerData.TriggerTag = GTag_State_LockedOn;
+	AbilityTriggerData.TriggerTag = GTag_State_EnemyInRange;
 	AbilityTriggerData.TriggerSource = EGameplayAbilityTriggerSource::OwnedTagPresent;
 	AbilityTriggers.Add(AbilityTriggerData);
 
@@ -75,6 +75,7 @@ void UGameplayAbility_TowerAttack::OnAttackReady()
 
 void UGameplayAbility_TowerAttack::StartAttack()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, "MESSAGE", true, {1, 1});
 	FVector Location = OwningTower->GetBulletSpawnPoint()->GetComponentLocation();
 	FRotator Rotation = FRotator::ZeroRotator;
 	
@@ -90,7 +91,19 @@ void UGameplayAbility_TowerAttack::StartAttack()
 
 	SpawnedProjectile->SetActorScale3D(FVector(.1, .1, .1));
 	SpawnedProjectile->GetTargetStruckDelegate()->BindUObject(this, &UGameplayAbility_TowerAttack::OnTargetStruck);
-	SpawnedProjectile->InitTarget(OwningTower->GetLockedOnEnemy()->GetProjectileTarget());
+
+	SpawnedProjectile->InitTarget(GetCurrentTarget()->GetProjectileTarget());	
+}
+
+AEnemyBase* UGameplayAbility_TowerAttack::GetCurrentTarget() const
+{
+	if (TargetingMethod == ETargetingMethod::Random)
+	{
+		return OwningTower->EnemiesInRange[FMath::RandRange(0, OwningTower->EnemiesInRange.Num() - 1)];
+	}
+
+	OwningTower->EnemiesInRange.Sort();
+	return TargetingMethod == ETargetingMethod::First ? OwningTower->EnemiesInRange.Top() : OwningTower->EnemiesInRange[0];
 }
 
 void UGameplayAbility_TowerAttack::OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const

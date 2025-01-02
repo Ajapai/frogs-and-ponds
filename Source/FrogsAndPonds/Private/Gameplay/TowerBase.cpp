@@ -73,12 +73,13 @@ void ATowerBase::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponen
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!OtherActor->IsA(AEnemyBase::StaticClass())) return;
-	
+
 	AEnemyBase* OtherEnemy = Cast<AEnemyBase>(OtherActor);
 	EnemiesInRange.Add(OtherEnemy);
-	if (!IsValid(LockedOnEnemy) || OtherEnemy->GetMoveDistance() < LockedOnEnemy->GetMoveDistance())
+	
+	if (EnemiesInRange.Num() == 1)
 	{
-		LockedOnEnemy = OtherEnemy;
+		AbilitySystemComponent->AddLooseGameplayTag(GTag_State_EnemyInRange);
 	}
 }
 
@@ -90,22 +91,16 @@ void ATowerBase::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	AEnemyBase* OtherEnemy = Cast<AEnemyBase>(OtherActor);
 	EnemiesInRange.Remove(OtherEnemy);
 
-	if (OtherEnemy == LockedOnEnemy)
+	if (EnemiesInRange.Num() == 0)
 	{
-		LockedOnEnemy = nullptr;
+		AbilitySystemComponent->RemoveLooseGameplayTag(GTag_State_EnemyInRange);
 	}
+
 }
 
 void ATowerBase::InitializeAbilities()
 {
 	for (auto Ability : AttackAbilities)
-	{
-		if (!Ability) continue;
-		AbilitySystemComponent->GiveAbility(
-			FGameplayAbilitySpec(Ability, 1, static_cast<int32>(EAbilityInputID::None), this));
-	}
-	
-	for (auto Ability : LockOnAbilities)
 	{
 		if (!Ability) continue;
 		AbilitySystemComponent->GiveAbility(
@@ -121,29 +116,11 @@ void ATowerBase::InitializeAttributes()
 	}
 }
 
-void ATowerBase::OnLockedOnEnemyChange(const AEnemyBase* PreviousTarget, const AEnemyBase* NewTarget) const
-{
-	if (PreviousTarget && NewTarget) return;
-	if (NewTarget)
-	{
-		AbilitySystemComponent->AddLooseGameplayTag(GTag_State_LockedOn);
-	}
-	else if (PreviousTarget)
-	{
-		AbilitySystemComponent->RemoveLooseGameplayTag(GTag_State_LockedOn);
-	}
-}
-
 void ATowerBase::UpdateAttackRange() const
 {
 	AttackRangeSphere->SetSphereRadius(GetAttackRange());
 	AttackRangeDecal->DecalSize = FVector(1, GetAttackRange(), GetAttackRange());
 	AttackRangeDecal->MarkRenderStateDirty();
-}
-
-AEnemyBase* ATowerBase::GetLockedOnEnemy() const
-{
-	return TObjectPtr<AEnemyBase>(LockedOnEnemy);
 }
 
 float ATowerBase::GetAttackPower() const

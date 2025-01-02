@@ -27,6 +27,14 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+
+// Operators
+public:
+	bool operator<(const AEnemyBase& Other) const
+	{
+		return MoveDistance < Other.MoveDistance;
+	}
+
 	
 // Virtuals
 public:
