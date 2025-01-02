@@ -33,8 +33,8 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual void Tick(float DeltaTime) override;
 
-	
-// UFunctions
+
+	// UFunctions
 protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnHealthChanged(float OldValue, float NewValue);
@@ -54,14 +54,11 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetMaxHealth() const;
 	UFUNCTION(BlueprintPure)
-	float GetMoveDistance() const;
-	UFUNCTION(BlueprintPure)
 	float GetMoveSpeed() const;
-
+	UFUNCTION(BlueprintPure)
+	float GetMoveDistance() const;
+	
 	const USceneComponent* GetProjectileTarget();
-
-private:
-	void SetMoveDistance(const float& NewValue) const;
 
 	
 // UProperties
@@ -85,11 +82,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	TObjectPtr<UCapsuleComponent> CapsuleComponent;
 	
-	UPROPERTY(EditInstanceOnly, Category="Custom")
-	TObjectPtr<const AEnemyPath> EnemyPath;
-
 	
-// Pointers
+// Variables
 private:
 	TWeakObjectPtr<USplineComponent> SplineComponent;
+	float MoveDistance = 0;
 };

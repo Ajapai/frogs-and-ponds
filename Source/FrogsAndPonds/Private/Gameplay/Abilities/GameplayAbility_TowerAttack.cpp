@@ -5,8 +5,8 @@
 
 #include "Core/GameplayTagsDeclaration.h"
 #include "Gameplay/EnemyBase.h"
-#include "Gameplay/Attributes/TowerAttributeSet.h"
 #include "Gameplay/TowerBase.h"
+#include "Gameplay/Attributes/AttackerAttributeSet.h"
 #include "Gameplay/Projectiles/ProjectileBase.h"
 
 UGameplayAbility_TowerAttack::UGameplayAbility_TowerAttack(): OwningTower(nullptr), TimerManager(nullptr)
@@ -19,8 +19,6 @@ UGameplayAbility_TowerAttack::UGameplayAbility_TowerAttack(): OwningTower(nullpt
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 	
 	AttackTimerDelegate.BindUObject(this, &UGameplayAbility_TowerAttack::OnAttackReady);
-
-	
 }
 
 void UGameplayAbility_TowerAttack::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
@@ -30,7 +28,7 @@ void UGameplayAbility_TowerAttack::OnGiveAbility(const FGameplayAbilityActorInfo
 	OwningTower = Cast<ATowerBase>(ActorInfo->OwnerActor);
 	TimerManager = &GetWorld()->GetTimerManager();
 	
-	ActorInfo->AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UTowerAttributeSet::GetAttackSpeedAttribute())
+	ActorInfo->AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UAttackerAttributeSet::GetAttackSpeedAttribute())
 	.AddUObject(this, &UGameplayAbility_TowerAttack::OnAttackSpeedChanged);
 }
 
@@ -41,7 +39,7 @@ void UGameplayAbility_TowerAttack::OnRemoveAbility(const FGameplayAbilityActorIn
 	OwningTower = nullptr;
 	TimerManager = nullptr;
 	
-	ActorInfo->AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UTowerAttributeSet::GetAttackSpeedAttribute()).RemoveAll(this);
+	ActorInfo->AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UAttackerAttributeSet::GetAttackSpeedAttribute()).RemoveAll(this);
 }
 
 void UGameplayAbility_TowerAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -91,9 +89,8 @@ void UGameplayAbility_TowerAttack::StartAttack()
 	AProjectileBase* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileClass, Location, Rotation);
 
 	SpawnedProjectile->SetActorScale3D(FVector(.1, .1, .1));
-	SpawnedProjectile->GetTargetStruckDelegate()->BindDynamic(this, &UGameplayAbility_TowerAttack::OnTargetStruck);
+	SpawnedProjectile->GetTargetStruckDelegate()->BindUObject(this, &UGameplayAbility_TowerAttack::OnTargetStruck);
 	SpawnedProjectile->InitTarget(OwningTower->GetLockedOnEnemy()->GetProjectileTarget());
-	
 }
 
 void UGameplayAbility_TowerAttack::OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const

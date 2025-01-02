@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "Gameplay/Abilities/GameplayAbility_Base.h"
 #include "GameplayAbility_TowerAttack.generated.h"
 
@@ -34,15 +35,16 @@ protected:
 
 	
 // UFunctions
-public:
+protected:
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnTargetStruck(AActor* Actor);
+	void OnTargetStruck(UAbilitySystemComponent* TargetAsc);
 
+	
 // Functions
 protected:
 	void OnAttackReady();
-	void StartAttack();
 	void OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const;
+	void StartAttack();
 
 
 // UProperties
@@ -52,15 +54,18 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom|Component")
 	TSubclassOf<AProjectileBase> ProjectileClass;
-	
 
-// Pointers
 private:
-	FTimerManager* TimerManager;
+	UPROPERTY(EditDefaultsOnly, Category="Custom|Damage")
+	float BaseDamage = 5;
 
+	UPROPERTY(EditDefaultsOnly, Category="Custom|Damage")
+	float AttackPowerCoefficient = 1;
 	
+
 // Variables
 private:
-	FTimerHandle AttackTimer;
 	FTimerDelegate AttackTimerDelegate;
+	FTimerHandle AttackTimer;
+	FTimerManager* TimerManager;
 };

@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Actor.h"
 #include "ProjectileBase.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE_OneParam(FTargetStruck, AActor*, Target);
+DECLARE_DELEGATE_OneParam(FTargetStruck, UAbilitySystemComponent*);
 
 UCLASS(Abstract)
 class FROGSANDPONDS_API AProjectileBase : public AActor
@@ -39,7 +40,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Custom|Values")
 	float ProjectileSpeed;
 
-	UPROPERTY(BlueprintReadOnly, Category="Custom|Values")
 	FTargetStruck TargetStruckDelegate;
 
 	UPROPERTY(BlueprintReadOnly, Category="Custom|Values")

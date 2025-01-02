@@ -11,8 +11,8 @@
 #include "Gameplay/EnemyBase.h"
 #include "Gameplay/Abilities/GameplayAbility_Base.h"
 #include "Gameplay/Abilities/GameplayAbility_TowerAttack.h"
+#include "Gameplay/Attributes/AttackerAttributeSet.h"
 #include "Gameplay/Attributes/AttributeSetBase.h"
-#include "Gameplay/Attributes/TowerAttributeSet.h"
 
 // Sets default values
 ATowerBase::ATowerBase()
@@ -41,7 +41,7 @@ ATowerBase::ATowerBase()
 	
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
 
-	DefaultAttributes.Add(UTowerAttributeSet::StaticClass());
+	DefaultAttributes.Add(UAttackerAttributeSet::StaticClass());
 }
 
 // Called when the game starts or when spawned
@@ -148,17 +148,17 @@ AEnemyBase* ATowerBase::GetLockedOnEnemy() const
 
 float ATowerBase::GetAttackPower() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UTowerAttributeSet::GetAttackPowerAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UAttackerAttributeSet::GetAttackPowerAttribute());
 }
 
 float ATowerBase::GetAttackSpeed() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UTowerAttributeSet::GetAttackSpeedAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UAttackerAttributeSet::GetAttackSpeedAttribute());
 }
 
 float ATowerBase::GetAttackRange() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UTowerAttributeSet::GetAttackRangeAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UAttackerAttributeSet::GetAttackRangeAttribute());
 }
 
 const USceneComponent* ATowerBase::GetBulletSpawnPoint() const

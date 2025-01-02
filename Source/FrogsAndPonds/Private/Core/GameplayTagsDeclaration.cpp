@@ -16,5 +16,6 @@ UE_DEFINE_GAMEPLAY_TAG(GTag_Status_Stun, "Status.Stun");
 UE_DEFINE_GAMEPLAY_TAG(GTag_State_LockedOn, "State.LockedOn");
 UE_DEFINE_GAMEPLAY_TAG(GTag_State_Active, "State.Active");
 
-// Cancel Tags 
-UE_DEFINE_GAMEPLAY_TAG(GTag_Cancel_State_Active, "Cancel.State.Active");
+// SetByCaller Tags 
+UE_DEFINE_GAMEPLAY_TAG(GTag_SetByCaller_Damage, "SetByCaller.Damage");
+UE_DEFINE_GAMEPLAY_TAG(GTag_SetByCaller_InstantDamage, "SetByCaller.InstantDamage");

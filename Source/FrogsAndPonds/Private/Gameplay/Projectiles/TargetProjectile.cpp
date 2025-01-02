@@ -17,7 +17,7 @@ void ATargetProjectile::Tick(const float DeltaTime)
 
 	if (Direction.Length() < 10)
 	{
-		TargetStruckDelegate.Execute(ProjectileTargetSceneComponent->GetOwner());
+		TargetStruckDelegate.Execute(Cast<IAbilitySystemInterface>(ProjectileTargetSceneComponent->GetOwner())->GetAbilitySystemComponent());
 		Destroy();
 	}
 	

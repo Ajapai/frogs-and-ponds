@@ -5,39 +5,33 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
 #include "Gameplay/Attributes/AttributeSetBase.h"
-#include "TowerAttributeSet.generated.h"
+#include "AttackerAttributeSet.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class FROGSANDPONDS_API UTowerAttributeSet : public UAttributeSetBase
+class FROGSANDPONDS_API UAttackerAttributeSet : public UAttributeSetBase
 {
 	GENERATED_BODY()
 
 	
-// Lifecycle
-public:
-	UTowerAttributeSet();
-
-	
-// Virtuals
+	// Virtuals
 private:
-	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void ClampAttributeOnChange(const FGameplayAttribute& Attribute, float& NewValue) const override;
 
 	
 // UProperties
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
-	FGameplayAttributeData AttackPower;
-	ATTRIBUTE_ACCESSORS(UTowerAttributeSet, AttackPower);
+	FGameplayAttributeData AttackPower = 10;
+	ATTRIBUTE_ACCESSORS(UAttackerAttributeSet, AttackPower);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
-	FGameplayAttributeData AttackSpeed;
-	ATTRIBUTE_ACCESSORS(UTowerAttributeSet, AttackSpeed);
+	FGameplayAttributeData AttackSpeed = 1;
+	ATTRIBUTE_ACCESSORS(UAttackerAttributeSet, AttackSpeed);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
-	FGameplayAttributeData AttackRange;
-	ATTRIBUTE_ACCESSORS(UTowerAttributeSet, AttackRange);	
+	FGameplayAttributeData AttackRange = 400;
+	ATTRIBUTE_ACCESSORS(UAttackerAttributeSet, AttackRange);	
 };

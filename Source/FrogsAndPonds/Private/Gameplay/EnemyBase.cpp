@@ -7,9 +7,9 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SplineComponent.h"
 #include "Core/GameplayTagsDeclaration.h"
-#include "Gameplay/EnemyPath.h"
 #include "Gameplay/Abilities/GameplayAbility_Move.h"
-#include "Gameplay/Attributes/EnemyAttributeSet.h"
+#include "Gameplay/Attributes/AttackerAttributeSet.h"
+#include "Gameplay/Attributes/DefenderAttributeSet.h"
 
 
 // Sets default values
@@ -32,15 +32,19 @@ AEnemyBase::AEnemyBase()
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
 
 	DefaultAbilities.Add(UGameplayAbility_Move::StaticClass());
-	DefaultAttributes.Add(UEnemyAttributeSet::StaticClass());
+	DefaultAttributes.Add(UDefenderAttributeSet::StaticClass());
+	DefaultAttributes.Add(UAttackerAttributeSet::StaticClass());
 }
 
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	SplineComponent = Cast<USplineComponent>(EnemyPath->GetComponentByClass(USplineComponent::StaticClass()));
+
+	SplineComponent = Cast<USplineComponent>(GetOwner()->GetComponentByClass(USplineComponent::StaticClass())); 
 	SetActorLocation(SplineComponent->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World));
+	
+	// SplineComponent = Cast<USplineComponent>(EnemyPath->GetComponentByClass(USplineComponent::StaticClass()));
+	// SetActorLocation(SplineComponent->GetLocationAtSplinePoint(0, ESplineCoordinateSpace::World));
 	
 	if (!AbilitySystemComponent) return;
 
@@ -48,7 +52,7 @@ void AEnemyBase::BeginPlay()
 	InitializeAttributes();
 
 	AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(GTag_Ability_Move));
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UEnemyAttributeSet::GetHealthAttribute()).
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UDefenderAttributeSet::GetHealthAttribute()).
 	                        AddUObject(this, &AEnemyBase::HealthChanged);
 }
 
@@ -63,8 +67,8 @@ void AEnemyBase::Tick(float DeltaTime)
 
 	if (AbilitySystemComponent->HasMatchingGameplayTag(GTag_Ability_Move))
 	{
-		SetMoveDistance(GetMoveDistance() + DeltaTime * 300 * GetMoveSpeed());
-		SetActorLocation(SplineComponent->GetLocationAtDistanceAlongSpline(GetMoveDistance(), ESplineCoordinateSpace::World));
+		MoveDistance += DeltaTime * 15 * GetMoveSpeed(); 
+		SetActorLocation(SplineComponent->GetLocationAtDistanceAlongSpline(MoveDistance, ESplineCoordinateSpace::World));
 	}
 }
 
@@ -84,8 +88,6 @@ void AEnemyBase::InitializeAttributes()
 	{
 		AbilitySystemComponent->AddAttributeSetSubobject(NewObject<UAttributeSetBase>(this, AttributeSetType));
 	}
-
-	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetMaxMoveDistanceAttribute(), SplineComponent->GetSplineLength());
 }
 
 void AEnemyBase::HealthChanged(const FOnAttributeChangeData& OnAttributeChangeData)
@@ -96,30 +98,25 @@ void AEnemyBase::HealthChanged(const FOnAttributeChangeData& OnAttributeChangeDa
 
 float AEnemyBase::GetHealth() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetHealthAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UDefenderAttributeSet::GetHealthAttribute());
 }
 
 float AEnemyBase::GetMaxHealth() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMaxHealthAttribute());
-}
-
-float AEnemyBase::GetMoveDistance() const
-{
-	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMoveDistanceAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UDefenderAttributeSet::GetMaxHealthAttribute());
 }
 
 float AEnemyBase::GetMoveSpeed() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UEnemyAttributeSet::GetMoveSpeedAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UDefenderAttributeSet::GetMoveSpeedAttribute());
+}
+
+float AEnemyBase::GetMoveDistance() const
+{
+	return MoveDistance;
 }
 
 const USceneComponent* AEnemyBase::GetProjectileTarget()
 {
 	return ProjectileTarget;
-}
-
-void AEnemyBase::SetMoveDistance(const float& NewValue) const
-{
-	AbilitySystemComponent->SetNumericAttributeBase(UEnemyAttributeSet::GetMoveDistanceAttribute(), NewValue);	
 }

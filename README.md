@@ -37,9 +37,6 @@
 // UProperties
 ...
 
-// Pointers
-...
-
 // Variables
 ...
 ```
