@@ -4,17 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "Gameplay/Projectiles/ProjectileBase.h"
-#include "TargetProjectile.generated.h"
+#include "ArchingProjectile.generated.h"
 
 /**
  * 
  */
 UCLASS(Abstract)
-class FROGSANDPONDS_API ATargetProjectile : public AProjectileBase
+class FROGSANDPONDS_API AArchingProjectile : public AProjectileBase
 {
 	GENERATED_BODY()
 
+	
+// Lifecycle
+protected:
+	virtual void BeginPlay() override;
 
+	
 // Overrides
 public:
 	virtual void Tick(float DeltaTime) override;
@@ -23,6 +28,15 @@ public:
 // UProperties
 private:
 	UPROPERTY(EditDefaultsOnly, Category="Custom")
+	float ArchingHeight = 200;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	float ProjectileSpeed = 10;
 
+
+// Variables
+private:
+	FVector StartPosition;
+	float CurrentDistance = 0;
+	
 };

@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "ApplyEffectsFunctionLibrary.generated.h"
 
+class UGameplayEffect;
 class UAbilitySystemComponent;
 class UGameplayAbility_Base;
 /**
@@ -20,5 +21,14 @@ class FROGSANDPONDS_API UApplyEffectsFunctionLibrary : public UBlueprintFunction
 // UFunctions
 public:
 	UFUNCTION(BlueprintCallable)
-	static void ApplyInstantDamageToTarget(UAbilitySystemComponent* TargetAsc, const UGameplayAbility_Base* CurrentAbility, const float Amount);
+	static void ApplyDamagePredictionToTarget(UAbilitySystemComponent* TargetAsc, const UGameplayAbility_Base* CurrentAbility, const float Amount);
+	
+	UFUNCTION(BlueprintCallable)
+	static void ApplyPredictedDamageToTarget(UAbilitySystemComponent* TargetAsc, const UGameplayAbility_Base* CurrentAbility, const float Amount);
+	
+	UFUNCTION(BlueprintCallable)
+	static void ApplyUnpredictedDamageToTarget(UAbilitySystemComponent* TargetAsc, const UGameplayAbility_Base* CurrentAbility, const float Amount);
+
+	UFUNCTION(BlueprintCallable)
+	static void ApplyEffectToTarget(UAbilitySystemComponent* TargetAsc, const UGameplayAbility_Base* CurrentAbility, TSubclassOf<UGameplayEffect> EffectClass, const float Duration, const float Amount);
 };

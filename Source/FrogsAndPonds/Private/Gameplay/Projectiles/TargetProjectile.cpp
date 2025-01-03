@@ -7,17 +7,17 @@ void ATargetProjectile::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (ProjectileTargetSceneComponent == nullptr)
+	if (TargetSceneComponent == nullptr)
 	{
 		Destroy();
 		return;
 	}
 
-	const FVector Direction = ProjectileTargetSceneComponent->GetComponentLocation() - GetActorLocation();
+	const FVector Direction = TargetSceneComponent->GetComponentLocation() - GetActorLocation();
 
 	if (Direction.Length() < 10)
 	{
-		TargetStruckDelegate.Execute(Cast<IAbilitySystemInterface>(ProjectileTargetSceneComponent->GetOwner())->GetAbilitySystemComponent());
+		AssignedTargetStruck();
 		Destroy();
 	}
 	

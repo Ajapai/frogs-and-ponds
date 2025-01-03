@@ -95,6 +95,7 @@ void AEnemyBase::InitializeAttributes()
 	AbilitySystemComponent->SetNumericAttributeBase(UDefensiveAttributeSet::GetMoveSpeedAttribute(), DefensiveAttributes.MoveSpeed);
 	AbilitySystemComponent->SetNumericAttributeBase(UDefensiveAttributeSet::GetMaxHealthAttribute(), DefensiveAttributes.MaxHealth);
 	AbilitySystemComponent->SetNumericAttributeBase(UDefensiveAttributeSet::GetHealthAttribute(), DefensiveAttributes.MaxHealth);
+	AbilitySystemComponent->SetNumericAttributeBase(UDefensiveAttributeSet::GetPredictedHealthAttribute(), DefensiveAttributes.MaxHealth);
 }
 
 void AEnemyBase::HealthChanged(const FOnAttributeChangeData& OnAttributeChangeData)

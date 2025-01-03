@@ -18,5 +18,5 @@ UE_DEFINE_GAMEPLAY_TAG(GTag_State_EnemyInRange, "State.EnemyInRange");
 UE_DEFINE_GAMEPLAY_TAG(GTag_State_Active, "State.Active");
 
 // SetByCaller Tags 
-UE_DEFINE_GAMEPLAY_TAG(GTag_SetByCaller_Damage, "SetByCaller.Damage");
-UE_DEFINE_GAMEPLAY_TAG(GTag_SetByCaller_InstantDamage, "SetByCaller.InstantDamage");
+UE_DEFINE_GAMEPLAY_TAG(GTag_SetByCaller_Amount, "SetByCaller.Amount");
+UE_DEFINE_GAMEPLAY_TAG(GTag_SetByCaller_Duration, "SetByCaller.Duration");

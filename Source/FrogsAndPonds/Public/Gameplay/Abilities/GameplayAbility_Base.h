@@ -37,6 +37,6 @@ public:
 	
 // UProperties
 private:
-	UPROPERTY(EditAnywhere, Category="Custom")
+	// UPROPERTY(EditAnywhere, Category="Custom")
 	EAbilityInputID AbilityInputID;
 };

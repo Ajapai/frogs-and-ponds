@@ -7,7 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "ProjectileBase.generated.h"
 
-DECLARE_DELEGATE_OneParam(FTargetStruck, UAbilitySystemComponent*);
+class USphereComponent;
+DECLARE_DELEGATE_TwoParams(FTargetStruck, UAbilitySystemComponent*, float);
 
 UCLASS(Abstract)
 class FROGSANDPONDS_API AProjectileBase : public AActor
@@ -25,23 +26,32 @@ protected:
 
 // Virtuals
 public:
-	virtual void InitTarget(const USceneComponent* ProjectileTarget);
+	virtual void Init(const USceneComponent* ProjectileTargetSceneComponent, float ProjectileDamage = 0);
 
 
 // Accessors
 public:
 	FTargetStruck* GetTargetStruckDelegate();
+
+
+// Functions
+protected:
+	void AssignedTargetStruck() const;
 	
 // UProperties
 protected:
-	UPROPERTY(EditDefaultsOnly, Category="Custom|Component")
+	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category="Custom|Values")
-	float ProjectileSpeed;
+	UPROPERTY(BlueprintReadOnly)
+	const USceneComponent* TargetSceneComponent;
 
+private:
+	UPROPERTY(EditDefaultsOnly, Category="Custom")
+	TObjectPtr<USphereComponent> SphereComponent;
+
+// Variables
+protected:
 	FTargetStruck TargetStruckDelegate;
-
-	UPROPERTY(BlueprintReadOnly, Category="Custom|Values")
-	const USceneComponent* ProjectileTargetSceneComponent;
+	float Damage;
 };

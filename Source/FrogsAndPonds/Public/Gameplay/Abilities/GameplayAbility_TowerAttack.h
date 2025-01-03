@@ -54,9 +54,14 @@ protected:
 protected:
 	void OnAttackReady();
 	void StartAttack();
-	AEnemyBase* GetCurrentTarget() const;
+	void TargetStruck(UAbilitySystemComponent* TargetAsc, float ProjectileDamage = 0);
 	void OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const;
 
+
+// Accessors
+private:
+	float GetDamageValue() const;
+	AEnemyBase* GetCurrentTarget() const;
 
 // UProperties
 protected:
@@ -76,7 +81,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	float AttackPowerCoefficient = 1;
 
-	
+	UPROPERTY(EditDefaultsOnly, Category="Custom")
+	bool bDamageIsPredictable = true;
 
 // Variables
 private:
