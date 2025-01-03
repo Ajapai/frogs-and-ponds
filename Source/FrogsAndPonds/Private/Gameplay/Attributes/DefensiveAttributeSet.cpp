@@ -11,4 +11,9 @@ void UDefensiveAttributeSet::ClampAttributeOnChange(const FGameplayAttribute& At
 	{
 		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth());
 	}
+
+	if (Attribute == GetPredictedHealthAttribute())
+	{
+		NewValue = FMath::Clamp(NewValue, 0.f, GetHealth());
+	}
 }

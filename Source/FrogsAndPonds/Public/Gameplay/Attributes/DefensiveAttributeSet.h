@@ -43,6 +43,10 @@ public:
 	ATTRIBUTE_ACCESSORS(UDefensiveAttributeSet, MaxHealth);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
+	FGameplayAttributeData PredictedHealth = 40;
+	ATTRIBUTE_ACCESSORS(UDefensiveAttributeSet, PredictedHealth);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
 	FGameplayAttributeData MoveSpeed = 10;
 	ATTRIBUTE_ACCESSORS(UDefensiveAttributeSet, MoveSpeed);
 

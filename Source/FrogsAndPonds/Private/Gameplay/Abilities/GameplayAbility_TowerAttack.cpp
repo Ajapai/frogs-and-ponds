@@ -8,6 +8,7 @@
 #include "Gameplay/TowerBase.h"
 #include "Gameplay/Attributes/OffensiveAttributeSet.h"
 #include "Gameplay/Projectiles/ProjectileBase.h"
+#include "Helpers/ApplyEffectsFunctionLibrary.h"
 
 UGameplayAbility_TowerAttack::UGameplayAbility_TowerAttack(): OwningTower(nullptr), TimerManager(nullptr)
 {
@@ -75,10 +76,6 @@ void UGameplayAbility_TowerAttack::OnAttackReady()
 
 void UGameplayAbility_TowerAttack::StartAttack()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, "MESSAGE", true, {1, 1});
-	FVector Location = OwningTower->GetBulletSpawnPoint()->GetComponentLocation();
-	FRotator Rotation = FRotator::ZeroRotator;
-	
 #if WITH_EDITOR
 	if (ProjectileClass == nullptr)
 	{
@@ -87,12 +84,40 @@ void UGameplayAbility_TowerAttack::StartAttack()
 	}
 #endif
 
+	FVector Location = OwningTower->GetBulletSpawnPoint()->GetComponentLocation();
+	FRotator Rotation = FRotator::ZeroRotator;
+	AEnemyBase* CurrentTarget = GetCurrentTarget();
+	
 	AProjectileBase* SpawnedProjectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileClass, Location, Rotation);
+	SpawnedProjectile->GetTargetStruckDelegate()->BindUObject(this, &UGameplayAbility_TowerAttack::TargetStruck);
+	SpawnedProjectile->Init(CurrentTarget->GetProjectileTarget(), GetDamageValue());
+	
+	if (bDamageIsPredictable)
+	{
+		UApplyEffectsFunctionLibrary::ApplyDamagePredictionToTarget(CurrentTarget->GetAbilitySystemComponent(), this, GetDamageValue());
+	}
+}
 
-	SpawnedProjectile->SetActorScale3D(FVector(.1, .1, .1));
-	SpawnedProjectile->GetTargetStruckDelegate()->BindUObject(this, &UGameplayAbility_TowerAttack::OnTargetStruck);
+void UGameplayAbility_TowerAttack::TargetStruck(UAbilitySystemComponent* TargetAsc, const float ProjectileDamage)
+{
+	if (bDamageIsPredictable)
+	{
+		UApplyEffectsFunctionLibrary::ApplyPredictedDamageToTarget(TargetAsc, this, ProjectileDamage);
+	}
+	else
+	{
+		UApplyEffectsFunctionLibrary::ApplyUnpredictedDamageToTarget(TargetAsc, this, ProjectileDamage);
+	}
+	OnTargetStruck(TargetAsc);
+}
 
-	SpawnedProjectile->InitTarget(GetCurrentTarget()->GetProjectileTarget());	
+void UGameplayAbility_TowerAttack::OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const
+{
+}
+
+float UGameplayAbility_TowerAttack::GetDamageValue() const
+{
+	return BaseDamage;
 }
 
 AEnemyBase* UGameplayAbility_TowerAttack::GetCurrentTarget() const
@@ -105,8 +130,3 @@ AEnemyBase* UGameplayAbility_TowerAttack::GetCurrentTarget() const
 	OwningTower->EnemiesInRange.Sort();
 	return TargetingMethod == ETargetingMethod::First ? OwningTower->EnemiesInRange.Top() : OwningTower->EnemiesInRange[0];
 }
-
-void UGameplayAbility_TowerAttack::OnAttackSpeedChanged(const FOnAttributeChangeData& OnAttributeChangeData) const
-{
-}
-

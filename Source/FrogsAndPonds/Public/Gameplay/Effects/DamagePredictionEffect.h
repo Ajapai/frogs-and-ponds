@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameplayEffect.h"
-#include "InstantDamageEffect.generated.h"
+#include "DamagePredictionEffect.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class FROGSANDPONDS_API UInstantDamageEffect : public UGameplayEffect
+class FROGSANDPONDS_API UDamagePredictionEffect : public UGameplayEffect
 {
 	GENERATED_BODY()
-
+	
 	
 // Lifecycle
 public:
-	UInstantDamageEffect();
+	UDamagePredictionEffect();	
 };
