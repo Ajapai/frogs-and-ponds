@@ -11,7 +11,7 @@
 #include "Gameplay/EnemyBase.h"
 #include "Gameplay/Abilities/GameplayAbility_Base.h"
 #include "Gameplay/Abilities/GameplayAbility_TowerAttack.h"
-#include "Gameplay/Attributes/AttackerAttributeSet.h"
+#include "Gameplay/Attributes/OffensiveAttributeSet.h"
 #include "Gameplay/Attributes/AttributeSetBase.h"
 
 // Sets default values
@@ -41,7 +41,7 @@ ATowerBase::ATowerBase()
 	
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
 
-	DefaultAttributes.Add(UAttackerAttributeSet::StaticClass());
+	DefaultAttributes.Add(UOffensiveAttributeSet::StaticClass());
 }
 
 // Called when the game starts or when spawned
@@ -114,6 +114,10 @@ void ATowerBase::InitializeAttributes()
 	{
 		AbilitySystemComponent->AddAttributeSetSubobject(NewObject<UAttributeSetBase>(this, AttributeSetType));
 	}
+
+	AbilitySystemComponent->SetNumericAttributeBase(UOffensiveAttributeSet::GetAttackPowerAttribute(), OffensiveAttributes.AttackPower);
+	AbilitySystemComponent->SetNumericAttributeBase(UOffensiveAttributeSet::GetAttackRangeAttribute(), OffensiveAttributes.AttackRange);
+	AbilitySystemComponent->SetNumericAttributeBase(UOffensiveAttributeSet::GetAttackSpeedAttribute(), OffensiveAttributes.AttackSpeed);
 }
 
 void ATowerBase::UpdateAttackRange() const
@@ -125,17 +129,17 @@ void ATowerBase::UpdateAttackRange() const
 
 float ATowerBase::GetAttackPower() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UAttackerAttributeSet::GetAttackPowerAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UOffensiveAttributeSet::GetAttackPowerAttribute());
 }
 
 float ATowerBase::GetAttackSpeed() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UAttackerAttributeSet::GetAttackSpeedAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UOffensiveAttributeSet::GetAttackSpeedAttribute());
 }
 
 float ATowerBase::GetAttackRange() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UAttackerAttributeSet::GetAttackRangeAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UOffensiveAttributeSet::GetAttackRangeAttribute());
 }
 
 const USceneComponent* ATowerBase::GetBulletSpawnPoint() const

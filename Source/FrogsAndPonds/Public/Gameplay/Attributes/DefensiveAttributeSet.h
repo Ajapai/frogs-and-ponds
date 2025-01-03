@@ -5,13 +5,24 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
 #include "Gameplay/Attributes/AttributeSetBase.h"
-#include "DefenderAttributeSet.generated.h"
+#include "DefensiveAttributeSet.generated.h"
+
+USTRUCT()
+struct FDefensiveAttributeStruct
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditDefaultsOnly)
+	float MaxHealth = 40;
+	UPROPERTY(EditDefaultsOnly)
+	float MoveSpeed = 10;
+};
 
 /**
  * 
  */
 UCLASS()
-class FROGSANDPONDS_API UDefenderAttributeSet : public UAttributeSetBase
+class FROGSANDPONDS_API UDefensiveAttributeSet : public UAttributeSetBase
 {
 	GENERATED_BODY()
 
@@ -25,14 +36,14 @@ private:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
 	FGameplayAttributeData Health = 40;
-	ATTRIBUTE_ACCESSORS(UDefenderAttributeSet, Health);
+	ATTRIBUTE_ACCESSORS(UDefensiveAttributeSet, Health);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
 	FGameplayAttributeData MaxHealth = 40;
-	ATTRIBUTE_ACCESSORS(UDefenderAttributeSet, MaxHealth);
+	ATTRIBUTE_ACCESSORS(UDefensiveAttributeSet, MaxHealth);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Custom")
 	FGameplayAttributeData MoveSpeed = 10;
-	ATTRIBUTE_ACCESSORS(UDefenderAttributeSet, MoveSpeed);
+	ATTRIBUTE_ACCESSORS(UDefensiveAttributeSet, MoveSpeed);
 
 };

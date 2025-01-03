@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "Attributes/OffensiveAttributeSet.h"
 #include "GameFramework/Actor.h"
 #include "TowerBase.generated.h"
 
@@ -72,14 +73,14 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom|GAS")
 	TArray<TSubclassOf<UGameplayAbility_TowerAttack>> AttackAbilities;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom|GAS")
-	TArray<TSubclassOf<UAttributeSetBase>> DefaultAttributes;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Custom|GAS")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category="Custom|Attributes")
+	FOffensiveAttributeStruct OffensiveAttributes;
+	
 	UPROPERTY(EditDefaultsOnly, Category="Custom|Component")
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 
@@ -95,5 +96,6 @@ private:
 	
 // Variables
 public:
+	TArray<TSubclassOf<UAttributeSetBase>> DefaultAttributes;
 	TArray<TObjectPtr<AEnemyBase>> EnemiesInRange;
 };

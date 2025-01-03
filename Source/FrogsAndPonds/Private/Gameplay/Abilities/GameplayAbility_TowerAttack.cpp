@@ -6,7 +6,7 @@
 #include "Core/GameplayTagsDeclaration.h"
 #include "Gameplay/EnemyBase.h"
 #include "Gameplay/TowerBase.h"
-#include "Gameplay/Attributes/AttackerAttributeSet.h"
+#include "Gameplay/Attributes/OffensiveAttributeSet.h"
 #include "Gameplay/Projectiles/ProjectileBase.h"
 
 UGameplayAbility_TowerAttack::UGameplayAbility_TowerAttack(): OwningTower(nullptr), TimerManager(nullptr)
@@ -28,7 +28,7 @@ void UGameplayAbility_TowerAttack::OnGiveAbility(const FGameplayAbilityActorInfo
 	OwningTower = Cast<ATowerBase>(ActorInfo->OwnerActor);
 	TimerManager = &GetWorld()->GetTimerManager();
 	
-	ActorInfo->AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UAttackerAttributeSet::GetAttackSpeedAttribute())
+	ActorInfo->AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UOffensiveAttributeSet::GetAttackSpeedAttribute())
 	.AddUObject(this, &UGameplayAbility_TowerAttack::OnAttackSpeedChanged);
 }
 
@@ -39,7 +39,7 @@ void UGameplayAbility_TowerAttack::OnRemoveAbility(const FGameplayAbilityActorIn
 	OwningTower = nullptr;
 	TimerManager = nullptr;
 	
-	ActorInfo->AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UAttackerAttributeSet::GetAttackSpeedAttribute()).RemoveAll(this);
+	ActorInfo->AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UOffensiveAttributeSet::GetAttackSpeedAttribute()).RemoveAll(this);
 }
 
 void UGameplayAbility_TowerAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,

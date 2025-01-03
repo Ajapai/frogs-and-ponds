@@ -8,8 +8,8 @@
 #include "Components/SplineComponent.h"
 #include "Core/GameplayTagsDeclaration.h"
 #include "Gameplay/Abilities/GameplayAbility_Move.h"
-#include "Gameplay/Attributes/AttackerAttributeSet.h"
-#include "Gameplay/Attributes/DefenderAttributeSet.h"
+#include "Gameplay/Attributes/OffensiveAttributeSet.h"
+#include "Gameplay/Attributes/DefensiveAttributeSet.h"
 
 
 // Sets default values
@@ -32,8 +32,8 @@ AEnemyBase::AEnemyBase()
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(FName("AbilitySystemComponent"));
 
 	DefaultAbilities.Add(UGameplayAbility_Move::StaticClass());
-	DefaultAttributes.Add(UDefenderAttributeSet::StaticClass());
-	DefaultAttributes.Add(UAttackerAttributeSet::StaticClass());
+	DefaultAttributes.Add(UDefensiveAttributeSet::StaticClass());
+	DefaultAttributes.Add(UOffensiveAttributeSet::StaticClass());
 }
 
 void AEnemyBase::BeginPlay()
@@ -52,7 +52,7 @@ void AEnemyBase::BeginPlay()
 	InitializeAttributes();
 
 	AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(GTag_Ability_Move));
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UDefenderAttributeSet::GetHealthAttribute()).
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UDefensiveAttributeSet::GetHealthAttribute()).
 	                        AddUObject(this, &AEnemyBase::HealthChanged);
 }
 
@@ -88,6 +88,13 @@ void AEnemyBase::InitializeAttributes()
 	{
 		AbilitySystemComponent->AddAttributeSetSubobject(NewObject<UAttributeSetBase>(this, AttributeSetType));
 	}
+	
+	AbilitySystemComponent->SetNumericAttributeBase(UOffensiveAttributeSet::GetAttackPowerAttribute(), OffensiveAttributes.AttackPower);
+	AbilitySystemComponent->SetNumericAttributeBase(UOffensiveAttributeSet::GetAttackRangeAttribute(), OffensiveAttributes.AttackRange);
+	AbilitySystemComponent->SetNumericAttributeBase(UOffensiveAttributeSet::GetAttackSpeedAttribute(), OffensiveAttributes.AttackSpeed);
+	AbilitySystemComponent->SetNumericAttributeBase(UDefensiveAttributeSet::GetMoveSpeedAttribute(), DefensiveAttributes.MoveSpeed);
+	AbilitySystemComponent->SetNumericAttributeBase(UDefensiveAttributeSet::GetMaxHealthAttribute(), DefensiveAttributes.MaxHealth);
+	AbilitySystemComponent->SetNumericAttributeBase(UDefensiveAttributeSet::GetHealthAttribute(), DefensiveAttributes.MaxHealth);
 }
 
 void AEnemyBase::HealthChanged(const FOnAttributeChangeData& OnAttributeChangeData)
@@ -98,17 +105,17 @@ void AEnemyBase::HealthChanged(const FOnAttributeChangeData& OnAttributeChangeDa
 
 float AEnemyBase::GetHealth() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UDefenderAttributeSet::GetHealthAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UDefensiveAttributeSet::GetHealthAttribute());
 }
 
 float AEnemyBase::GetMaxHealth() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UDefenderAttributeSet::GetMaxHealthAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UDefensiveAttributeSet::GetMaxHealthAttribute());
 }
 
 float AEnemyBase::GetMoveSpeed() const
 {
-	return AbilitySystemComponent->GetNumericAttribute(UDefenderAttributeSet::GetMoveSpeedAttribute());
+	return AbilitySystemComponent->GetNumericAttribute(UDefensiveAttributeSet::GetMoveSpeedAttribute());
 }
 
 float AEnemyBase::GetMoveDistance() const

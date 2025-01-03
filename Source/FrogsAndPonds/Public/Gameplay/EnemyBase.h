@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayEffectTypes.h"
+#include "Attributes/DefensiveAttributeSet.h"
+#include "Attributes/OffensiveAttributeSet.h"
 #include "EnemyBase.generated.h"
 
 class UCapsuleComponent;
@@ -13,6 +15,7 @@ class UAttributeSetBase;
 class AEnemyPath;
 class USplineComponent;
 class UGameplayAbility_Base;
+
 
 UCLASS(Abstract)
 class FROGSANDPONDS_API AEnemyBase : public AActor, public IAbilitySystemInterface 
@@ -73,9 +76,6 @@ public:
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom")
 	TArray<TSubclassOf<UGameplayAbility_Base>> DefaultAbilities;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom")
-	TArray<TSubclassOf<UAttributeSetBase>> DefaultAttributes;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Custom")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
@@ -84,6 +84,12 @@ protected:
 	TObjectPtr<USceneComponent> ProjectileTarget;
 	
 private:
+	UPROPERTY(EditDefaultsOnly, Category="Custom|Attributes")
+	FOffensiveAttributeStruct OffensiveAttributes;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Custom|Attributes")
+	FDefensiveAttributeStruct DefensiveAttributes;
+	
 	UPROPERTY(EditDefaultsOnly, Category="Custom")
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 
@@ -93,6 +99,7 @@ private:
 	
 // Variables
 private:
+	TArray<TSubclassOf<UAttributeSetBase>> DefaultAttributes;
 	TWeakObjectPtr<USplineComponent> SplineComponent;
 	float MoveDistance = 0;
 };

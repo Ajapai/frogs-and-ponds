@@ -4,14 +4,14 @@
 #include "Gameplay/Effects/InstantDamageEffect.h"
 
 #include "Core/GameplayTagsDeclaration.h"
-#include "Gameplay/Attributes/DefenderAttributeSet.h"
+#include "Gameplay/Attributes/DefensiveAttributeSet.h"
 
 UInstantDamageEffect::UInstantDamageEffect()
 {
 	DurationPolicy = EGameplayEffectDurationType::Instant;
 	
 	FGameplayModifierInfo GameplayModifierInfo;
-	GameplayModifierInfo.Attribute = UDefenderAttributeSet::GetHealthAttribute();
+	GameplayModifierInfo.Attribute = UDefensiveAttributeSet::GetHealthAttribute();
 	GameplayModifierInfo.ModifierOp = EGameplayModOp::AddBase;
 
 	FSetByCallerFloat SetByCallerMagnitude;

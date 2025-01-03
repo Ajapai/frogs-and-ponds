@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Gameplay/Attributes/DefenderAttributeSet.h"
+#include "Gameplay/Attributes/DefensiveAttributeSet.h"
 
-void UDefenderAttributeSet::ClampAttributeOnChange(const FGameplayAttribute& Attribute, float& NewValue) const
+void UDefensiveAttributeSet::ClampAttributeOnChange(const FGameplayAttribute& Attribute, float& NewValue) const
 {
 	Super::ClampAttributeOnChange(Attribute, NewValue);
 	
