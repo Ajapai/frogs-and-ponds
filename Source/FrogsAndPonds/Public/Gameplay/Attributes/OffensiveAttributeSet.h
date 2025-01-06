@@ -17,7 +17,7 @@ struct FOffensiveAttributeStruct
 	UPROPERTY(EditDefaultsOnly, Category="OffensiveAttributes")
 	float AttackSpeed = 1;
 	UPROPERTY(EditDefaultsOnly, Category="OffensiveAttributes")
-	float AttackRange = 400;
+	float AttackRange = 200;
 };
 
 /**

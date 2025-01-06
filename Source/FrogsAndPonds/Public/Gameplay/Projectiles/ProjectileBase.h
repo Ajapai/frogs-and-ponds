@@ -27,6 +27,9 @@ protected:
 // Virtuals
 public:
 	virtual void Init(const USceneComponent* ProjectileTargetSceneComponent, float ProjectileDamage = 0);
+	
+protected:
+	virtual void PostInit() PURE_VIRTUAL();
 
 
 // Accessors

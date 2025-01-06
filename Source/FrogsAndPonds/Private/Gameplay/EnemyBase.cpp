@@ -54,6 +54,8 @@ void AEnemyBase::BeginPlay()
 	AbilitySystemComponent->TryActivateAbilitiesByTag(FGameplayTagContainer(GTag_Ability_Move));
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UDefensiveAttributeSet::GetHealthAttribute()).
 	                        AddUObject(this, &AEnemyBase::HealthChanged);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UDefensiveAttributeSet::GetPredictedHealthAttribute()).
+						AddUObject(this, &AEnemyBase::PredictedHealthChanged);
 }
 
 UAbilitySystemComponent* AEnemyBase::GetAbilitySystemComponent() const
@@ -102,6 +104,14 @@ void AEnemyBase::HealthChanged(const FOnAttributeChangeData& OnAttributeChangeDa
 {
 	OnHealthChanged(OnAttributeChangeData.OldValue, OnAttributeChangeData.NewValue);
 	if (OnAttributeChangeData.NewValue <= 0) Destroy();
+}
+
+void AEnemyBase::PredictedHealthChanged(const FOnAttributeChangeData& OnAttributeChangeData) const
+{
+	if (OnAttributeChangeData.NewValue <= 0)
+	{
+		CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 float AEnemyBase::GetHealth() const

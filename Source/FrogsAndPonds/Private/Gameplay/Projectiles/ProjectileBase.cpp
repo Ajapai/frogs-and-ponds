@@ -27,6 +27,8 @@ void AProjectileBase::Init(const USceneComponent* ProjectileTargetSceneComponent
 {
 	TargetSceneComponent = ProjectileTargetSceneComponent;
 	Damage = ProjectileDamage;
+
+	PostInit();
 }
 
 FTargetStruck* AProjectileBase::GetTargetStruckDelegate()

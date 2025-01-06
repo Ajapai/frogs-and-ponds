@@ -70,6 +70,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Custom")
 	TSubclassOf<AProjectileBase> ProjectileClass;
+	bool bIsActivated = false;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category="Custom")

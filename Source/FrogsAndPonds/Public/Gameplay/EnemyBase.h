@@ -56,6 +56,7 @@ private:
 	void InitializeAbilities();
 	void InitializeAttributes();
 	void HealthChanged(const FOnAttributeChangeData& OnAttributeChangeData);
+	void PredictedHealthChanged(const FOnAttributeChangeData& OnAttributeChangeData) const;
 	
 	
 // Accessors
