@@ -14,14 +14,15 @@ class FROGSANDPONDS_API AArchingProjectile : public AProjectileBase
 {
 	GENERATED_BODY()
 
-	
-// Lifecycle
+
+	// Lifecycle
 protected:
 	virtual void BeginPlay() override;
 
 	
 // Overrides
-public:
+private:
+	virtual void PostInit() override;
 	virtual void Tick(float DeltaTime) override;
 
 
@@ -38,5 +39,10 @@ private:
 private:
 	FVector StartPosition;
 	float CurrentDistance = 0;
+	FVector TargetLocation;
+
+	float MaxArch = 140;
+	float MinArch = 40;
+	float Range = 400;
 	
 };

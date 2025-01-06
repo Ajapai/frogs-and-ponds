@@ -10,6 +10,13 @@ void AArchingProjectile::BeginPlay()
 	StartPosition = GetActorLocation();
 }
 
+void AArchingProjectile::PostInit()
+{
+	// const float DistanceToTarget = (StartPosition - TargetSceneComponent->GetComponentLocation()).Length();
+	//
+	// ArchingHeight = FMath::GetMappedRangeValueClamped(FVector2d(0, Range), FVector2d(MaxArch, MinArch), DistanceToTarget);
+}
+
 void AArchingProjectile::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -21,7 +28,12 @@ void AArchingProjectile::Tick(const float DeltaTime)
 		Destroy();
 	}
 
-	FVector NextPosition = FMath::Lerp(StartPosition, TargetSceneComponent->GetComponentLocation(), CurrentDistance);
+	if (IsValid(TargetSceneComponent))
+	{
+		TargetLocation = TargetSceneComponent->GetComponentLocation();
+	}
+
+	FVector NextPosition = FMath::Lerp(StartPosition, TargetLocation, CurrentDistance);
 	NextPosition.Z += FMath::Sin(CurrentDistance * PI) * ArchingHeight;
 
 	SetActorRotation((NextPosition - GetActorLocation()).Rotation());

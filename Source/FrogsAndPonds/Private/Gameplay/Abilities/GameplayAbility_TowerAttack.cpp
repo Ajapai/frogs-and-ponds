@@ -53,6 +53,7 @@ void UGameplayAbility_TowerAttack::ActivateAbility(const FGameplayAbilitySpecHan
 	{
 		EndAbility(Handle, ActorInfo, ActivationInfo, false, false);
 	}
+
 	
 	if (TimerManager->IsTimerActive(AttackTimer)) return;
 
@@ -63,7 +64,9 @@ void UGameplayAbility_TowerAttack::EndAbility(const FGameplayAbilitySpecHandle H
 											  const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 											  bool bReplicateEndAbility, bool bWasCancelled)
 {
+	const float TimeRemaining = TimerManager->GetTimerRemaining(AttackTimer);
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+	TimerManager->SetTimer(AttackTimer, AttackTimerDelegate, TimeRemaining, false);
 }
 
 void UGameplayAbility_TowerAttack::OnAttackReady()
